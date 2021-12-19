@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Stark Yanng">
+    <meta name="keyword"  content="Stark Yanng">
+    <link rel="shortcut icon" href="/img/ironman-draw.png">
+    <!-- Place this tag in your head or just before your close body tag. -->
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
+    <title>
+        
+          Github page + Hexo建站 - Stark Yanng
+        
+    </title>
+
+    <link rel="canonical" href="http://starkyanng.github.io/2017/07/15/Hexo建站/">
+
+    <!-- Bootstrap Core CSS -->
+
+   
+<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.4.1/css/bootstrap.min.css">
+
+
+    
+
+    <!-- Custom CSS --> 
+    
+<link rel="stylesheet" href="/css/beantech.min.css">
+
+
+    
+<link rel="stylesheet" href="/css/donate.css">
+
+	
+<link rel="stylesheet" href="/css/w3.css">
+
+    <!-- Pygments Highlight CSS -->
+    
+<link rel="stylesheet" href="/css/highlight.css">
+
+
+    
+<link rel="stylesheet" href="/css/widget.css">
+
+
+    
+<link rel="stylesheet" href="/css/rocket.css">
+
+
+    
+<link rel="stylesheet" href="/css/signature.css">
+
+
+    
+<link rel="stylesheet" href="/css/toc.css">
+
+
+    <!-- Custom Fonts -->
+    <!-- <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="https://cdn.staticfile.org/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <!-- Hux Delete, sad but pending in China
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/
+    css'>
+    -->
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+	
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+	<!-- Modified by Yu-Hsuan Yen -->
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+    }
+   .post-heading{
+    padding:20px;
+    }
+  .person {
+    border: 10px solid transparent;
+    margin-bottom: 25px;
+    width: 80%;
+    height: 80%;
+    opacity: 0.7;
+  }
+  .person:hover {
+    border-color: #f1f1f1;
+  }
+
+</style>
+
+<header id="headerid" class="w3-indigo intro-header" style="position:relative;">
+    <!-- Signature -->
+	
+        <div class="container">
+            <div class=" row" >
+			
+			<canvas id="particles-js-canvas" style="position:absolute;z-index:1;top:0px;left:0px;" width="100%" height="50%"></canvas>
+			
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1" style="z-index:2;">
+                
+                    <div class="post-heading" style="padding:40px">
+                        <div class="tags">
+                            
+                              <a class="tag" href="/tags/#好奇心" title="好奇心">好奇心</a>
+                            
+                        </div>
+                        <h1>Github page + Hexo建站</h1>
+                        <h2 class="subheading"></h2>
+                        <span class="meta">
+                            Posted by Stark Yanng on
+                            2017-07-15
+                        </span>
+                    </div>
+                
+                </div>
+            </div>
+        </div>
+  
+</header>
+
+	
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Stark Yanng</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a  href="/">主页</a>
+                    </li>
+		    
+                    
+
+                        
+                        <li>
+           
+                            <a  href="/技术人生">技术人生</a>
+                           
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+           
+                            <a  href="/我的梦呓">我的梦呓</a>
+                           
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+           
+                            <a  href="/好奇心">好奇心</a>
+                           
+                        </li>
+                        
+                    
+                    
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+
+    <!-- Main Content -->
+    <!-- Modify by Yu-Hsuan Yen -->
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+            <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <p>小站建成！</p>
+<p><img src="hello-july/home.jpg"></p>
+<span id="more"></span>
+
+<!-- TOC depthFrom:1 depthTo:6 withLinks:1 updateOnSave:1 orderedList:2 -->
+
+<ul>
+<li><a href="#%E5%87%86%E5%A4%87%E5%B7%A5%E4%BD%9C">准备工作</a></li>
+<li><a href="#%E4%BD%BF%E7%94%A8jekyll%E7%94%9F%E6%88%90%E9%9D%99%E6%80%81%E7%BD%91%E9%A1%B5">使用jekyll生成静态网页</a><ul>
+<li><a href="#%E4%BD%BF%E7%94%A8jekyll%E4%B8%BB%E9%A2%98%E9%80%89%E6%8B%A9%E5%99%A8">使用jekyll主题选择器</a></li>
+</ul>
+</li>
+<li><a href="#%E4%BB%8Ejekyll%E8%BF%81%E7%A7%BB%E5%88%B0hexo">从jekyll迁移到hexo</a><ul>
+<li><a href="#%E5%AE%89%E8%A3%85">安装</a></li>
+<li><a href="#%E5%88%9D%E5%A7%8B%E5%8C%96">初始化</a></li>
+<li><a href="#%E9%85%8D%E7%BD%AE">配置</a></li>
+<li><a href="#%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4">常用命令</a><ul>
+<li><a href="#%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E6%96%B0post">创建一个新post</a></li>
+<li><a href="#%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E6%96%B0%E7%9A%84%E8%8D%89%E7%A8%BF">创建一个新的草稿</a></li>
+<li><a href="#%E5%8F%91%E5%B8%83%E4%B8%80%E4%B8%AA%E8%8D%89%E7%A8%BF">发布一个草稿</a></li>
+<li><a href="#%E5%8F%91%E5%B8%83%E5%88%B0github-page">发布到github page</a></li>
+</ul>
+</li>
+<li><a href="#%E4%BF%AE%E6%94%B9%E4%B8%BB%E9%A2%98">修改主题</a></li>
+</ul>
+</li>
+<li><a href="#%E9%81%87%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98">遇到的问题</a><ul>
+<li><a href="#warn-no-layout-archivesindexhtml">WARN no layout: archives/index.html</a></li>
+<li><a href="#%E5%9B%BE%E7%89%87%E7%9A%84%E6%98%BE%E7%A4%BA%E9%97%AE%E9%A2%98">图片的显示问题</a></li>
+</ul>
+</li>
+<li><a href="#%E5%8F%82%E8%80%83">参考</a></li>
+</ul>
+<!-- /TOC -->
+
+<h1 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h1><p>1.在github上创建一个名为username.github.io的仓库</p>
+<p>2.将该仓库克隆到本地<br><code>$ git clone https://github.com/username/username.github.io</code></p>
+<p>3.在该项目中添加一个新文件</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ cd username.github.io</span><br><span class="line">$ echo &#x27;hello world&#x27; &gt; index.html</span><br></pre></td></tr></table></figure>
+
+<p>4.提交推送到远程仓库</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ git add .</span><br><span class="line">$ git commit -m &quot;Initial commit&quot;</span><br><span class="line">$ git push -u origin master</span><br></pre></td></tr></table></figure>
+
+<p>5.完成，在浏览器中访问[<a href="https://username.github.io]">https://username.github.io]</a></p>
+<h1 id="使用jekyll生成静态网页"><a href="#使用jekyll生成静态网页" class="headerlink" title="使用jekyll生成静态网页"></a>使用jekyll生成静态网页</h1><p>Github pages高度集成了Jekyll，这是一种广泛使用的静态网页生成器，也就是说，Github pages默认使用Jekyll来生成静态网页。</p>
+<h2 id="使用jekyll主题选择器"><a href="#使用jekyll主题选择器" class="headerlink" title="使用jekyll主题选择器"></a>使用jekyll主题选择器</h2><ol>
+<li>进入仓库的设置页面。</li>
+<li>在“Github pages”块中，点击choose theme。</li>
+<li>选择一个主题。</li>
+<li>进入页面预览效果。</li>
+</ol>
+<h1 id="从jekyll迁移到hexo"><a href="#从jekyll迁移到hexo" class="headerlink" title="从jekyll迁移到hexo"></a>从jekyll迁移到hexo</h1><p>比较了三个静态博客生成工具Jekyll,Octopress和Hexo,其中Octopress是基于Jekyll的，两者都是基于Ruby的，而Hexo是基于Node.js的，综合考虑，决定改用Hexo。</p>
+<h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><p>1.环境需求</p>
+<ul>
+<li>Node.js</li>
+<li>Git</li>
+</ul>
+<p>2.安装Hexo<br><code>$ npm install -g hexo-cli</code></p>
+<p>3.安装成功，检测hexo版本<br><code>$ hexo version</code></p>
+<h2 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h2><p>安装完成后，使用如下命令来初始化Hexo：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ hexo init &lt;folder&gt;</span><br><span class="line">$ cd &lt;folder&gt;</span><br><span class="line">$ npm install</span><br></pre></td></tr></table></figure>
+<h2 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h2><p>可以通过修改_config.yml文件来修改Hexo的配置，其中配置项分为如下几类。</p>
+<p>1.站点配置</p>
+<p><img src="hello-july/conf1.png" alt="conf"></p>
+<p>2.URL配置</p>
+<p><img src="hello-july/conf2.jpg" alt="conf"></p>
+<p>3.目录配置</p>
+<p><img src="hello-july/conf3.png" alt="conf1"></p>
+<p>4.书写配置</p>
+<p><img src="hello-july/conf4.jpg" alt="conf1"></p>
+<p>5.目录和标签配置</p>
+<p><img src="hello-july/conf5.jpg" alt="conf1"></p>
+<p>6.日期和时间配置</p>
+<p><img src="hello-july/conf6.jpg" alt="conf1"></p>
+<h2 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h2><h3 id="创建一个新post"><a href="#创建一个新post" class="headerlink" title="创建一个新post"></a>创建一个新post</h3><p><code>$ hexo new [layout] &lt;title&gt;</code></p>
+<h3 id="创建一个新的草稿"><a href="#创建一个新的草稿" class="headerlink" title="创建一个新的草稿"></a>创建一个新的草稿</h3><p><code>$ hexo new draft &lt;layout&gt; titlename</code></p>
+<h3 id="发布一个草稿"><a href="#发布一个草稿" class="headerlink" title="发布一个草稿"></a>发布一个草稿</h3><p><code>$ hexo publish titlename</code></p>
+<h3 id="发布到github-page"><a href="#发布到github-page" class="headerlink" title="发布到github page"></a>发布到github page</h3><p>1.安装hexo-deploy-git<br><code>$ npm install hexo-deploy-git --save</code></p>
+<p>2.修改_config.yml配置文件</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">deploy:</span><br><span class="line">  type:git</span><br><span class="line">  repo:&lt;repository url&gt;</span><br><span class="line">  branch:&lt;branch&gt;</span><br><span class="line">  message:&lt;message&gt;</span><br></pre></td></tr></table></figure>
+
+<p>3.生成静态页面<br><code>$ hexo generate</code></p>
+<p>4.在本地生成站点，预览效果<br><code>$ hexo server</code></p>
+<p>5.在本地预览包括草稿draft在内的效果<br><code>$ hexo server --draft</code></p>
+<p>6.部署<br><code>$ hexo deploy</code></p>
+<h2 id="修改主题"><a href="#修改主题" class="headerlink" title="修改主题"></a>修改主题</h2><p>1.安装主题<br><code>$ git clone https://github.com/litten/hexo-theme-yilia.git themes/yilia</code></p>
+<p>2.配置主题<br>修改_config.yml配置文件:<br><code>theme:yilia</code></p>
+<p>3.更新主题</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ cd themes/yilia</span><br><span class="line">$ git pull</span><br></pre></td></tr></table></figure>
+
+<h1 id="遇到的问题"><a href="#遇到的问题" class="headerlink" title="遇到的问题"></a>遇到的问题</h1><h2 id="WARN-no-layout-archives-index-html"><a href="#WARN-no-layout-archives-index-html" class="headerlink" title="WARN no layout: archives/index.html"></a>WARN no layout: archives/index.html</h2><p>解决：原因是主题没有安装，安装主题并修改配置文件即可.</p>
+<h2 id="图片的显示问题"><a href="#图片的显示问题" class="headerlink" title="图片的显示问题"></a>图片的显示问题</h2><p>markdown插入图片的语法是<code>![name](path/img.jpg)</code>。问题在于图片的路径问题，使用了本地的相对路径后，到服务器上就显示不出来了，因为文件渲染后图片的路径变了。</p>
+<p>解决办法是：<br>1.将_config.yml配置文件里的post_asset_folder属性设为true.<br>2.安装插件:<code>npm install https://github.com/CodeFalling/hexo-asset-image --save</code><br>3.这样下次新创建一个post时，就会在_posts目录下创建一个与post同名的文件夹，post中所需要的资源文件就放在这个文件夹里。图片引用方式：<code>![name](postname/img.jpg)</code></p>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><ul>
+<li><a target="_blank" rel="noopener" href="http://litten.me/">litten的主页</a></li>
+<li><a target="_blank" rel="noopener" href="https://hexo.io/docs/">Hexo官方文档</a></li>
+</ul>
+
+                
+
+                <hr>
+                <!-- Pager -->
+                <ul class="pager">
+                    
+                    
+                </ul>
+
+                <br>
+
+                <!--打赏-->
+                
+                <!--打赏-->
+
+                <br>
+                <!--分享-->
+                
+                <!--分享-->
+                <br>                       
+                
+                <!-- require APlayer -->
+                
+
+                <!-- disqus comment start -->
+                
+                <!-- disqus comment end -->
+
+                
+				
+            </div>
+
+            <!-- Tabe of Content -->
+            <!-- Table of Contents -->
+
+                
+            <!-- Sidebar Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5><a href="/tags/">标签云</a></h5>
+                    <div class="tags">
+                       
+                          <a class="tag" href="/tags/#好奇心" title="好奇心">好奇心</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+                <hr>
+                <h5>FRIENDS</h5>
+                <ul class="list-inline">
+
+                    
+                        <li><a href="https://coolshell.cn" target="_blank">coolshell</a></li>
+                    
+                </ul>
+                
+            </div>
+        </div>
+    </div>
+</article>
+
+
+
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("https://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'hover',
+          placement: 'left',
+          icon: 'ℬ'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+
+
+    <!-- Footer -->
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                
+                
+                
+
+                
+
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://github.com/starkyanng">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; Stark Yanng 2021 
+                    <br>
+                    Powered by <a target="_blank" rel="noopener" href="http://www.hexo.io">Hexo</a> 
+                    <span style="display: inline-block; margin: 0 5px;">
+                        <i class="fa fa-heart"></i>
+                    </span> 
+                    Theme by <a target="_blank" rel="noopener" href="https://github.com/kinggozhang/hexo-theme-ace">ACE</a> 
+					
+					
+					<i class="fa fa-eye" id="leancounter"></i>
+					
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+
+   
+<script src="https://cdn.staticfile.org/jquery/2.2.4/jquery.min.js"></script>
+
+
+
+
+<!-- Bootstrap Core JavaScript -->
+
+   
+<script src="https://cdn.staticfile.org/twitter-bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+
+
+<!-- Custom Theme JavaScript -->
+
+<script src="/js/hux-blog.min.js"></script>
+
+
+
+	
+<script src="/js/particles.js"></script>
+
+	
+<script src="/js/particles_config.js"></script>
+
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- 
+     Because of the native support for backtick-style fenced code blocks 
+     right within the Markdown is landed in Github Pages, 
+     From V1.6, There is no need for Highlight.js, 
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0  
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/    
+-->
+<!--
+    <script>
+        async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("http://starkyanng.github.io/2017/07/15/Hexo%E5%BB%BA%E7%AB%99/index.html/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("https://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+
+
+
+<!-- Baidu Tongji -->
+
+
+
+
+
+
+	<a id="rocket" href="#top" class=""></a>
+	<script type="text/javascript" src="/js/totop.js?v=1.0.0" async=""></script>
+    <script type="text/javascript" src="/js/toc.js?v=1.0.0" async=""></script>
+<!-- Image to hack wechat -->
+<img src="http://starkyanng.github.io/img/icon_wechat.png" width="0" height="0" />
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>
