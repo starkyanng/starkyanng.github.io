@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Stark Yanng">
+    <meta name="keyword"  content="Stark Yanng">
+    <link rel="shortcut icon" href="/img/ironman-draw.png">
+    <!-- Place this tag in your head or just before your close body tag. -->
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
+    <title>
+        
+          JAVA串点成线——对象 - Stark Yanng
+        
+    </title>
+
+    <link rel="canonical" href="http://starkyanng.github.io/2021/08/15/JAVA串点成线——对象/">
+
+    <!-- Bootstrap Core CSS -->
+
+   
+<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.4.1/css/bootstrap.min.css">
+
+
+    
+
+    <!-- Custom CSS --> 
+    
+<link rel="stylesheet" href="/css/beantech.min.css">
+
+
+    
+<link rel="stylesheet" href="/css/donate.css">
+
+	
+<link rel="stylesheet" href="/css/w3.css">
+
+    <!-- Pygments Highlight CSS -->
+    
+<link rel="stylesheet" href="/css/highlight.css">
+
+
+    
+<link rel="stylesheet" href="/css/widget.css">
+
+
+    
+<link rel="stylesheet" href="/css/rocket.css">
+
+
+    
+<link rel="stylesheet" href="/css/signature.css">
+
+
+    
+<link rel="stylesheet" href="/css/toc.css">
+
+
+    <!-- Custom Fonts -->
+    <!-- <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="https://cdn.staticfile.org/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <!-- Hux Delete, sad but pending in China
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/
+    css'>
+    -->
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+	
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+	<!-- Modified by Yu-Hsuan Yen -->
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+    }
+   .post-heading{
+    padding:20px;
+    }
+  .person {
+    border: 10px solid transparent;
+    margin-bottom: 25px;
+    width: 80%;
+    height: 80%;
+    opacity: 0.7;
+  }
+  .person:hover {
+    border-color: #f1f1f1;
+  }
+
+</style>
+
+<header id="headerid" class="w3-indigo intro-header" style="position:relative;">
+    <!-- Signature -->
+	
+        <div class="container">
+            <div class=" row" >
+			
+			<canvas id="particles-js-canvas" style="position:absolute;z-index:1;top:0px;left:0px;" width="100%" height="50%"></canvas>
+			
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1" style="z-index:2;">
+                
+                    <div class="post-heading" style="padding:40px">
+                        <div class="tags">
+                            
+                              <a class="tag" href="/tags/#Java" title="Java">Java</a>
+                            
+                              <a class="tag" href="/tags/#Java基础" title="Java基础">Java基础</a>
+                            
+                        </div>
+                        <h1>JAVA串点成线——对象</h1>
+                        <h2 class="subheading"></h2>
+                        <span class="meta">
+                            Posted by Stark Yanng on
+                            2021-08-15
+                        </span>
+                    </div>
+                
+                </div>
+            </div>
+        </div>
+  
+</header>
+
+	
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Stark Yanng</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a  href="/">主页</a>
+                    </li>
+		    
+                    
+
+                        
+                        <li>
+           
+                            <a  href="/技术人生">技术人生</a>
+                           
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+           
+                            <a  href="/我的梦呓">我的梦呓</a>
+                           
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+           
+                            <a  href="/好奇心">好奇心</a>
+                           
+                        </li>
+                        
+                    
+                    
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+
+    <!-- Main Content -->
+    <!-- Modify by Yu-Hsuan Yen -->
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+            <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <p><img src="/2021/08/15/JAVA%E4%B8%B2%E7%82%B9%E6%88%90%E7%BA%BF%E2%80%94%E2%80%94%E5%AF%B9%E8%B1%A1/Java.webp"></p>
+<h1 id="什么是对象"><a href="#什么是对象" class="headerlink" title="什么是对象"></a>什么是对象</h1><p>在JAVA中，一切皆为对象。对象是类的实例，给类的所有属性赋值。</p>
+<p>对象分为类对象和实例对象，实例对象很好理解。而类对象是<code>Class</code>类的一个实例，用来描述某个类或某个接口的定义。<code>Class</code>类的构造方法是私有的，这意味着类对象是不能被new出来的，而是由JVM在加载类的时候通过<code>ClassLoader</code>的<code>defineClass</code>方法自动创建的（这应该也意味着类对象都是单例的）。如果想获得一个类的实例，可以有两种方法：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">1.通过实例</span><br><span class="line">obj.getClass().getName()</span><br><span class="line"></span><br><span class="line">2.通过类</span><br><span class="line">Foo.class.getName()</span><br></pre></td></tr></table></figure>
+
+<p><code>Class</code>常被用于反射中，后面在JAVA反射中再细讲。</p>
+<h1 id="对象的创建"><a href="#对象的创建" class="headerlink" title="对象的创建"></a>对象的创建</h1><p>在JAVA中，对象的创建有3种方式：</p>
+<ol>
+<li>通过new关键字创建一个对象</li>
+<li>通过<code>Class</code>对象的newInstance方法采用反射的方式创建一个对象</li>
+<li>通过<code>clone</code>方法复制一个对象</li>
+</ol>
+<p>创建对象时，会对对象的成员属性进行初始化，初始化语句的优先级顺序是:</p>
+<ol>
+<li>属性的默认值</li>
+<li>父类的静态语句块</li>
+<li>子类的静态语句块</li>
+<li>父类的无参构造方法</li>
+<li>子类的构造方法</li>
+</ol>
+<h2 id="关于创建对象的一些最佳实践"><a href="#关于创建对象的一些最佳实践" class="headerlink" title="关于创建对象的一些最佳实践"></a>关于创建对象的一些最佳实践</h2><h3 id="使用静态工厂方法代替构造器"><a href="#使用静态工厂方法代替构造器" class="headerlink" title="使用静态工厂方法代替构造器"></a>使用静态工厂方法代替构造器</h3><p>即通过暴露一些类的静态方法给客户端，在这些静态方法里帮助用户创建对象，而不是让用户直接通过new的方式。</p>
+<p>这样做的第一个好处是，构造器其实是没有名字的，只能通过构造方法的签名（参数的类型、顺序）来区分不同的构造方法，这样用户在使用new的方式创建对象时可能会比较迷惑，不确定下一个该传什么参数（不过现在的一些智能IDE都会有提示的）。而通过静态工厂方法，可以通过给方法取合适的名字来屏蔽那些细节。</p>
+<p>其实我们在工作中也有用到这个方法，比如在封装RPC服务的调用结果时，会提供一些调用成功或者失败的静态方法直接返回封装后的调用结果。</p>
+<p>第二个好处是可以复用一些已经创建好的实例，避免重复创建对象。例如JDK中的<code>Boolean.valueOf(boolean)</code>、<code>BigInteger.valueOf(long)</code>方法等。</p>
+<p>第三个好处是静态工厂方法可以返回原返回类型的子类的对象。这个有什么用呢？在一些基于接口的框架中，可能不方便返回对象的真正类型，例如JDK中的<code>Collections</code>集合工具，封装了一些返回不可变集合、同步集合的工具方法，其实在内部封装了很多不可变集合、同步集合的新的类型，但是客户端是不用感知的，而且将来如果替换了这些类型，也不会影响到客户端（这也要求客户端要采用接口来引用被返回的对象，当然这也是一种良好的习惯）。</p>
+<p>在工作中，也会用到很多基于这种思想的框架或者库，比如SPI机制（JDBC的<code>DriverManager.getConnection</code>就是返回<code>Connection</code>服务接口的一个具体实现）。</p>
+<p>因此，创建自定义类时，在提供公有的构造器之前，先想想使用静态工厂方法是否能带来上述好处。</p>
+<h3 id="当构造器参数过多时采用Builder模式"><a href="#当构造器参数过多时采用Builder模式" class="headerlink" title="当构造器参数过多时采用Builder模式"></a>当构造器参数过多时采用Builder模式</h3><p>当类的构造器需要传入很多参数时，不管是重叠构造器模式，还是静态工厂方法，都会需要设置很多个不同的构造器或者静态方法。</p>
+<p>JAVA beans方式（一个无参构造器+多个setter方法）也会导致状态的不一致，因为可能会忘了调用某一个setter方法。</p>
+<p>这时可以考虑使用Builder模式来创建一个对象，代码易于阅读，也可以对参数进行校验，而且也可以保证bean状态的一致性。</p>
+<p>Builder模式其实是模拟了像Python等语言中的具名可选参数。</p>
+<p>Builder模式的缺点就是可能会使代码更加冗长，想要创建一个对象必须先创建它的builder对象，在一些对性能比较敏感的场景下可能会造成问题。</p>
+<h3 id="避免创建不必要的对象"><a href="#避免创建不必要的对象" class="headerlink" title="避免创建不必要的对象"></a>避免创建不必要的对象</h3><p>首先要避免创建一些不必要的对象，例如</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">String = new String(&quot;jianzhi&quot;);</span><br></pre></td></tr></table></figure>
+
+<p>其次对于一些不会变的对象，可以作为类的final静态成员，而不是每次都去重新创建一个。</p>
+<p>此外还有一种隐式的会导致创建不必要对象的情况，就是自动装箱：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">// sum的类型应该用long</span><br><span class="line">Long sum = 0L;</span><br><span class="line">for (int i = 0; i &lt; Integer.MAX_VALUE; i++) &#123;</span><br><span class="line">    sum += i;</span><br><span class="line">&#125;</span><br><span class="line">System.out.println(sum);</span><br></pre></td></tr></table></figure>
+<p>因此要优先使用基本类型，而不是装箱的基本类型。</p>
+<h1 id="对象的销毁"><a href="#对象的销毁" class="headerlink" title="对象的销毁"></a>对象的销毁</h1><p>虽然JAVA中有垃圾收集器帮助我们回收对象，但我们却不能完全依赖于垃圾收集器，特别是当我们需要自己管理内存的时候。</p>
+<p>什么叫自己管理内存呢？如下所示：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">// 栈的一种实现</span><br><span class="line">public class Stack &#123;</span><br><span class="line">    private Object[] elements;</span><br><span class="line">    private Integer size = 0;</span><br><span class="line">    private final static Integer DEFAULT_INITIAL_CAPACITY = 16;</span><br><span class="line"></span><br><span class="line">    public Stack() &#123;</span><br><span class="line">        elements = new Object[DEFAULT_INITIAL_CAPACITY];</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 入栈</span><br><span class="line">     * */</span><br><span class="line">    public void push(Object e) &#123;</span><br><span class="line">        ensureCapacity();</span><br><span class="line">        elements[size++]  = e;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 出栈</span><br><span class="line">     * */</span><br><span class="line">    public Object pop() &#123;</span><br><span class="line">        if (size == 0) &#123;</span><br><span class="line">            throw new EmptyStackException();</span><br><span class="line">        &#125;</span><br><span class="line">        return elements[--size];</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 容量不够时扩容</span><br><span class="line">     * */</span><br><span class="line">    private void ensureCapacity() &#123;</span><br><span class="line">        if (elements.length == size) &#123;</span><br><span class="line">            elements = Arrays.copyOf(elements, 2 * size + 1);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>利用一个Object数组来实现一个栈的功能，就是相当于自己管理了一片内存，就需要注意管理栈中元素的回收。基于上面的实现，大多数情况下都是没有问题的，但有一种情况会产生内存泄漏的问题，即扩容之后，栈中的元素在一直减少，那样被出栈的元素就会内存泄漏了，因为<code>elements</code>会一直保持着对它们的引用。正确的出栈实现应当是下面这样：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">public Object pop() &#123;</span><br><span class="line">    if (size == 0) &#123;</span><br><span class="line">        throw new EmptyStackException();</span><br><span class="line">    &#125;</span><br><span class="line">    Object result = elements[--size];</span><br><span class="line">    // 显示消除对象的引用</span><br><span class="line">    elements[size] = null;</span><br><span class="line">    return result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="所有对象的通用方法"><a href="#所有对象的通用方法" class="headerlink" title="所有对象的通用方法"></a>所有对象的通用方法</h1><p>JAVA中所有的类都会默认继承自<code>Object</code>类，因此<code>Object</code>类中的所有方法都是所有对象共有的。</p>
+<p>看一下<code>Object</code>类中都有哪些方法：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line">public class Object &#123;</span><br><span class="line"></span><br><span class="line">    private static native void registerNatives();</span><br><span class="line">    static &#123;</span><br><span class="line">        registerNatives();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public final native Class&lt;?&gt; getClass();</span><br><span class="line"></span><br><span class="line">    public native int hashCode();</span><br><span class="line"></span><br><span class="line">    public boolean equals(Object obj) &#123;</span><br><span class="line">        return (this == obj);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    protected native Object clone() throws CloneNotSupportedException;</span><br><span class="line"></span><br><span class="line">    public String toString() &#123;</span><br><span class="line">        return getClass().getName() + &quot;@&quot; + Integer.toHexString(hashCode());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public final native void notify();</span><br><span class="line"></span><br><span class="line">    public final native void notifyAll();</span><br><span class="line"></span><br><span class="line">    public final native void wait(long timeout) throws InterruptedException;</span><br><span class="line"></span><br><span class="line">    public final void wait(long timeout, int nanos) throws InterruptedException &#123;</span><br><span class="line">        if (timeout &lt; 0) &#123;</span><br><span class="line">            throw new IllegalArgumentException(&quot;timeout value is negative&quot;);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        if (nanos &lt; 0 || nanos &gt; 999999) &#123;</span><br><span class="line">            throw new IllegalArgumentException(</span><br><span class="line">                                &quot;nanosecond timeout value out of range&quot;);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        if (nanos &gt; 0) &#123;</span><br><span class="line">            timeout++;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        wait(timeout);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public final void wait() throws InterruptedException &#123;</span><br><span class="line">        wait(0);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    protected void finalize() throws Throwable &#123;    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>其中的<code>equals</code>、<code>hashcode</code>、<code>toString</code>、<code>clone</code>、<code>finalize</code>方法都是非final的，这意味着它们被设计成可以重写的。在重写这些方法时，要遵循它们的通用约定。</p>
+<p>下面分别看一下这些方法。</p>
+<h2 id="getClass方法"><a href="#getClass方法" class="headerlink" title="getClass方法"></a><code>getClass</code>方法</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">public final native Class&lt;?&gt; getClass();</span><br></pre></td></tr></table></figure>
+
+<p><code>getClass</code>方法可以获取一个运行时的实例对象的类对象，有了类对象，我们就可以获取到对象的类型信息、成员属性、方法信息了，继而就可以使用反射能力。</p>
+<p>该方法是一个<code>native</code>方法。看一下它的实现？</p>
+<h2 id="hashcode和equals方法"><a href="#hashcode和equals方法" class="headerlink" title="hashcode和equals方法"></a><code>hashcode</code>和<code>equals</code>方法</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">public boolean equals(Object obj) &#123;</span><br><span class="line">    return (this == obj);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public native int hashCode();</span><br></pre></td></tr></table></figure>
+
+<p><code>equals</code>方法用来判断两个对象是否相等。相等分为”物理”相等和”逻辑”相等，物理相等是指两个对象指向同一个实例，即指向同一块内存区域。该方法的默认实现就是判断两个对象是否是”物理”相等的。如果自定义的类有判断”逻辑”相等的需求，就需要重写<code>equals</code>方法了。</p>
+<p>重写<code>equals</code>方法需要遵循JDK规范中的通用约定，即要实现”等价关系”，包含以下几点：</p>
+<ol>
+<li>自反性：对于任何非null的值x，<code>x.equals(x)</code>必须返回<code>true</code>。</li>
+<li>对称性：对于任何非null的值x和y，当且仅当<code>x.equals(y)</code>返回<code>true</code>时，<code>y.equals(x)</code>也必须返回<code>true</code>。</li>
+<li>传递性：对于任何非null的值x、y和z，如果<code>x.equals(y)</code>返回<code>true</code>，且<code>y.equals(z)</code>也返回<code>true</code>，则<code>x.equals(z)</code>也必须返回<code>true</code>。</li>
+<li>一致性：对于任何非null的值x和y，只要x和y的对象信息没有被修改，那么<code>x.equals(y)</code>必须始终返回相同的结果。</li>
+<li>非空性：对于任何非null的值x，<code>x.equals(null)</code>必须返回<code>false</code>。</li>
+</ol>
+<p>结合上述要求，重写<code>equals</code>方法的一个最佳实践是：</p>
+<ol>
+<li>使用<code>==</code>检查是否是同一个对象的引用。</li>
+<li>使用<code>instanceOf</code>检查是否是正确的类型。</li>
+<li>将参数转换为正确的类型。</li>
+<li>对于每个”关键”域，检查是否相等。所谓的关键域，是指那些会影响对象逻辑相等的属性。最好不要包含冗余域，即那些可以通过关键域计算出来的域。</li>
+</ol>
+<p>示例代码如下所示：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">@Override</span><br><span class="line">public boolean equals(Object obj) &#123;</span><br><span class="line">    if (obj == this) &#123;</span><br><span class="line">        return true;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    if (!(obj instanceof Person)) &#123;</span><br><span class="line">        return false;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    Person ap = (Person) obj;</span><br><span class="line">    return ap.getName().equals(name) &amp;&amp; ap.getSex().equals(sex);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>hashcode</code>方法用来返回一个对象的散列值，本质上就是一个散列函数。JDK规范中对于该方法的实现约定是：</p>
+<ol>
+<li>在应用的执行期间，只要对象的信息没有被修改，那么多次调用<code>hashcode</code>方法必须返回同一个整数值。</li>
+<li>如果两个对象通过<code>equals</code>方法比较是相等的，那么它们的<code>hashcode</code>方法也必须返回相同的整数值。</li>
+<li>如果两个对象通过<code>equals</code>方法比较是不相等的，那么就不要求它们的<code>hashcode</code>必须返回相同的整数值。</li>
+</ol>
+<p><code>hashcode</code>方法的默认实现是<code>native</code>的，它会返回对象在内存中的地址的整数值。对于<code>equals</code>和<code>hashcode</code>方法的默认实现，可以发现是符合上述要求的。</p>
+<p>自定义类时，如果重写了<code>equals</code>方法时，必须也要重写<code>hashcode</code>方法，不然在和所有基于散列的集合（<code>HashMap</code>、<code>HashSet</code>、<code>HashTable</code>）一起使用时，可能会出现问题。比如自定义类的两个通过<code>equals</code>判定为相等的实例x和y，先以x为key放到散列集合中，再以y为key获取对应的value时，获取到的会是null，这是因为它们的散列值不同，会被放到不同的散列桶中。</p>
+<p>那么具体要如何重写<code>hashcode</code>方法呢？一个好的散列函数会倾向于为不相等的对象生成不同的散列码。下面是一个简单通用的实现方法：</p>
+<ol>
+<li>取一个非零的常量，比如17，作为变量result的值。</li>
+<li>对于每个关键域，分别进行一下步骤：<br> a. 计算int类型的散列码code。<pre><code> a.1 如果是boolean类型，计算`(f ? 1 : 0)`
+ a.2 如果是byte、char、short或int类型，计算`(int)f`
+ a.3 如果是long类型，计算`(int)(f ^ (f &gt;&gt;&gt; 32))`
+ a.4 如果是float类型，计算`Float.floatToIntBits(f)`
+ a.5 如果是double类型，计算`Double.doubleToLongBits(f)`得到long类型的值，然后继续计算`(int)(f ^ (f &gt;&gt;&gt; 32))`
+ a.6 如果是对象引用，则通过递归的方式计算该对象的hashcode
+ a.7 如果是数组，则按照递归的方式分别计算每个元素的值，然后再按照2.b的方法得到一个散列值。或者使用JDK1.5中增加的`Arrays.hashCode`方法
+</code></pre>
+ b. 按照公式迭代计算result：<code>result = 31 * result + c</code></li>
+</ol>
+<p>上述2.b中的公式中之所以用31这个数字，是因为它是一个奇素数。如果乘数是偶数的话并且产生溢出的话，信息就会丢失（因为与2相乘等价于左移运算）；使用素数则是因为习惯使用素数计算散列结果。另外31还有个重要的特性，就是可以用移位运算和减法运算代替乘法（<code>i * 31 == i &lt;&lt; 5 - i</code>），VM可以自动完成这种优化。</p>
+<p>下面来看一下JDK类库中的<code>String</code>类是如何重写<code>equals</code>和<code>hashcode</code>方法的。</p>
+<p><code>equals</code>方法：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">public boolean equals(Object anObject) &#123;</span><br><span class="line">    // 1.首先比较是否指向同一个对象</span><br><span class="line">    if (this == anObject) &#123;</span><br><span class="line">        return true;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // 2. 判断是否是String实例</span><br><span class="line">    if (anObject instanceof String) &#123;</span><br><span class="line">        // 3. 转为String实例</span><br><span class="line">        String anotherString = (String)anObject;</span><br><span class="line"></span><br><span class="line">        // 4. 分别比较每个关键域是否相等。对于String类型来说，就是比较char数组的每个字符是否都是相等的</span><br><span class="line">        int n = value.length;</span><br><span class="line">        if (n == anotherString.value.length) &#123;</span><br><span class="line">            char v1[] = value;</span><br><span class="line">            char v2[] = anotherString.value;</span><br><span class="line">            int i = 0;</span><br><span class="line">            while (n-- != 0) &#123;</span><br><span class="line">                if (v1[i] != v2[i])</span><br><span class="line">                    return false;</span><br><span class="line">                i++;</span><br><span class="line">            &#125;</span><br><span class="line">            return true;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    return false;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>hashcode</code>方法:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">public int hashCode() &#123;</span><br><span class="line">    int h = hash;</span><br><span class="line">    if (h == 0 &amp;&amp; value.length &gt; 0) &#123;</span><br><span class="line">        char val[] = value;</span><br><span class="line"></span><br><span class="line">        // 可以发现，String类实现hashcode的方法就是采用上述公式</span><br><span class="line">        for (int i = 0; i &lt; value.length; i++) &#123;</span><br><span class="line">            h = 31 * h + val[i];</span><br><span class="line">        &#125;</span><br><span class="line">        hash = h;</span><br><span class="line">    &#125;</span><br><span class="line">    return h;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="clone方法"><a href="#clone方法" class="headerlink" title="clone方法"></a><code>clone</code>方法</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">protected native Object clone() throws CloneNotSupportedException;</span><br></pre></td></tr></table></figure>
+
+<p><code>clone</code>方法用于创建一个对象的拷贝，它提供了一种不需要构造器就可以创建对象的方法。该方法有如下约定：</p>
+<ol>
+<li>x.clone() != x</li>
+<li>x.clone().getClass() == x.getClass()</li>
+<li>x.clone().equals(x)</li>
+</ol>
+<p>但第2、3点都不是强制要求。</p>
+<p><code>clone</code>方法是<code>protected</code>的，因此它的子类实现时要改为<code>public</code>。此外想要实现<code>clone</code>方法的子类还必须实现<code>Cloneable</code>接口，表明该类拥有克隆对象的能力。如果没有实现<code>Cloneable</code>接口，调用<code>clone</code>方法会报<code>CloneNotSupportedException</code>异常。</p>
+<p><code>clone</code>方法虽然看上去很强大，很美好，但实际上用好却不容易。如果一个类只有基本类型的域或者指向不可变对象的引用域，那么按照如下方法重写即可:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">@Override</span><br><span class="line">public Person clone() &#123;</span><br><span class="line">    try &#123;</span><br><span class="line">        return (Person)super.clone();</span><br><span class="line">    &#125; catch (CloneNotSupportedException e) &#123;</span><br><span class="line">        throw new AssertionError();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>但是如果一个类的域是指向可变对象的话，采用上述方法，新对象的域会指向被克隆的域所指向的对象，两者之间相互影响，就可产生不可预料的结果。因此对于这种情况，要采取”深度拷贝“的方法。可以有两种方法来实现：</p>
+<ol>
+<li>递归调用每个域的clone方法</li>
+<li>先调用<code>super.clone()</code>，然后把新对象的每个域设为空白状态，再通过调用高层方法来设置每个域的状态。比如拷贝一个散列表，先将每个散列桶置为空，然后使用put(key, value)方法将被克隆对象中的每个键值对放到新的散列桶中。</li>
+</ol>
+<p>我们也可以使用其它方法来替代<code>clone</code>方法:</p>
+<ol>
+<li>拷贝构造器：提供一个参数类型为类本身的构造器</li>
+<li>拷贝工厂：提供一个类似于拷贝构造器的静态工厂方法</li>
+</ol>
+<p>其实所有通用集合的实现都提供了一个拷贝构造器，例如HashMap：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">public HashMap(Map&lt;? extends K, ? extends V&gt; m) &#123;</span><br><span class="line">    this.loadFactor = DEFAULT_LOAD_FACTOR;</span><br><span class="line">    putMapEntries(m, false);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>而它的<code>clone</code>方法只实现了浅拷贝：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">@SuppressWarnings(&quot;unchecked&quot;)</span><br><span class="line">@Override</span><br><span class="line">public Object clone() &#123;</span><br><span class="line">    HashMap&lt;K,V&gt; result;</span><br><span class="line">    try &#123;</span><br><span class="line">        result = (HashMap&lt;K,V&gt;)super.clone();</span><br><span class="line">    &#125; catch (CloneNotSupportedException e) &#123;</span><br><span class="line">        // this shouldn&#x27;t happen, since we are Cloneable</span><br><span class="line">        throw new InternalError(e);</span><br><span class="line">    &#125;</span><br><span class="line">    result.reinitialize();</span><br><span class="line">    result.putMapEntries(this, false);</span><br><span class="line">    return result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>对于一些不可变的类，重写<code>clone</code>方法是没有任何意义的，因为新对象和被克隆的对象之间没有实质的区别。例如<code>String</code>类就没有实现<code>Cloneable</code>接口。</p>
+<p>综上所述，子类尽量避免重写<code>clone</code>方法，也尽量避免调用<code>clone</code>方法（除非拷贝数组）。</p>
+<h2 id="toString方法"><a href="#toString方法" class="headerlink" title="toString方法"></a><code>toString</code>方法</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">public String toString() &#123;</span><br><span class="line">    return getClass().getName() + &quot;@&quot; + Integer.toHexString(hashCode());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>该方法用来返回类的一个相对有意义的名称，默认实现是类名+hashcode的16进制表示。JDK规范推荐子类最好都能重写该方法。因为当一个对象通过prinln，字符串联操作符（+）或者调试器打印时，都会默认调用它的toString方法，如果返回的名称是有意义、便于人阅读的，将会有利于代码的调试。</p>
+<p>在重写<code>toString</code>方法时，最好能够返回该对象中所有有意义的字段信息。</p>
+<p>JDK中<code>String</code>类重写<code>toString</code>方法：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">// 直接返回对象自身，因为该对象已经是一个string字符串了</span><br><span class="line">public String toString() &#123;</span><br><span class="line">    return this;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="wait和notify方法"><a href="#wait和notify方法" class="headerlink" title="wait和notify方法"></a><code>wait</code>和<code>notify</code>方法</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">public final native void wait(long timeout) throws InterruptedException;</span><br><span class="line">public final void wait() throws InterruptedException &#123;</span><br><span class="line">    wait(0);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public final native void notify();</span><br><span class="line">public final native void notifyAll();</span><br></pre></td></tr></table></figure>
+
+<p><code>wait</code>和<code>notify</code>方法用于实现线程间的同步，在JAVA并发编程中再细讲。</p>
+<h2 id="finalize方法"><a href="#finalize方法" class="headerlink" title="finalize方法"></a><code>finalize</code>方法</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">protected void finalize() throws Throwable &#123; &#125;</span><br></pre></td></tr></table></figure>
+
+<p>当一个对象不再可达，被垃圾收集器回收时，就会执行该对象的<code>finalize</code>方法。</p>
+<p>但是执行<code>finalize</code>方法的时间是不确定的，因此不能像C++里的析构器那样用来做资源回收工作。此外，JDK规范里也没法保证<code>finalize</code>方法被哪一个线程执行，有可能执行<code>finalize</code>方法的线程优先级非常低。即使是<code>System.gc</code>和<code>System.runFinalization</code>方法也不能保证<code>finalize</code>方法一定会被执行。</p>
+<p>因此还是要尽量避免使用<code>finalize</code>方法。</p>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><ul>
+<li>Java编程思想</li>
+<li>Effevtive Java</li>
+</ul>
+
+                
+
+                <hr>
+                <!-- Pager -->
+                <ul class="pager">
+                    
+                    
+                        <li class="next">
+                            <a href="/2019/11/03/Java中的AtomicLong和LongAdder/" data-toggle="tooltip" data-placement="top" title="阅读源码——Java中的AtomicLong和LongAdder">下一篇 &rarr;</a>
+                        </li>
+                    
+                </ul>
+
+                <br>
+
+                <!--打赏-->
+                
+                <!--打赏-->
+
+                <br>
+                <!--分享-->
+                
+                <!--分享-->
+                <br>                       
+                
+                <!-- require APlayer -->
+                
+
+                <!-- disqus comment start -->
+                
+                <!-- disqus comment end -->
+
+                
+				
+            </div>
+
+            <!-- Tabe of Content -->
+            <!-- Table of Contents -->
+
+                
+            <!-- Sidebar Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5><a href="/tags/">标签云</a></h5>
+                    <div class="tags">
+                       
+                          <a class="tag" href="/tags/#Java" title="Java">Java</a>
+                        
+                          <a class="tag" href="/tags/#Java基础" title="Java基础">Java基础</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+                <hr>
+                <h5>FRIENDS</h5>
+                <ul class="list-inline">
+
+                    
+                        <li><a href="https://coolshell.cn" target="_blank">coolshell</a></li>
+                    
+                </ul>
+                
+            </div>
+        </div>
+    </div>
+</article>
+
+
+
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("https://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'hover',
+          placement: 'left',
+          icon: 'ℬ'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+
+
+    <!-- Footer -->
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                
+                
+                
+
+                
+
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://github.com/starkyanng">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; Stark Yanng 2021 
+                    <br>
+                    Powered by <a target="_blank" rel="noopener" href="http://www.hexo.io">Hexo</a> 
+                    <span style="display: inline-block; margin: 0 5px;">
+                        <i class="fa fa-heart"></i>
+                    </span> 
+                    Theme by <a target="_blank" rel="noopener" href="https://github.com/kinggozhang/hexo-theme-ace">ACE</a> 
+					
+					
+					<i class="fa fa-eye" id="leancounter"></i>
+					
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+
+   
+<script src="https://cdn.staticfile.org/jquery/2.2.4/jquery.min.js"></script>
+
+
+
+
+<!-- Bootstrap Core JavaScript -->
+
+   
+<script src="https://cdn.staticfile.org/twitter-bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+
+
+<!-- Custom Theme JavaScript -->
+
+<script src="/js/hux-blog.min.js"></script>
+
+
+
+	
+<script src="/js/particles.js"></script>
+
+	
+<script src="/js/particles_config.js"></script>
+
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- 
+     Because of the native support for backtick-style fenced code blocks 
+     right within the Markdown is landed in Github Pages, 
+     From V1.6, There is no need for Highlight.js, 
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0  
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/    
+-->
+<!--
+    <script>
+        async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("http://starkyanng.github.io/2021/08/15/JAVA%E4%B8%B2%E7%82%B9%E6%88%90%E7%BA%BF%E2%80%94%E2%80%94%E5%AF%B9%E8%B1%A1/index.html/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("https://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+
+
+
+<!-- Baidu Tongji -->
+
+
+
+
+
+
+	<a id="rocket" href="#top" class=""></a>
+	<script type="text/javascript" src="/js/totop.js?v=1.0.0" async=""></script>
+    <script type="text/javascript" src="/js/toc.js?v=1.0.0" async=""></script>
+<!-- Image to hack wechat -->
+<img src="http://starkyanng.github.io/img/icon_wechat.png" width="0" height="0" />
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>

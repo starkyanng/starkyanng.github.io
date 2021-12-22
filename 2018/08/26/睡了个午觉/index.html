@@ -14,11 +14,11 @@
     <script async defer src="https://buttons.github.io/buttons.js"></script>
     <title>
         
-          Github page + Hexo建站 - Stark Yanng
+          睡了个午觉 - Stark Yanng
         
     </title>
 
-    <link rel="canonical" href="http://starkyanng.github.io/2017/07/15/Github-page-Hexo建站/">
+    <link rel="canonical" href="http://starkyanng.github.io/2018/08/26/睡了个午觉/">
 
     <!-- Bootstrap Core CSS -->
 
@@ -122,14 +122,14 @@
                     <div class="post-heading" style="padding:40px">
                         <div class="tags">
                             
-                              <a class="tag" href="/tags/#好奇心" title="好奇心">好奇心</a>
+                              <a class="tag" href="/tags/#sleepingtalk" title="sleepingtalk">sleepingtalk</a>
                             
                         </div>
-                        <h1>Github page + Hexo建站</h1>
+                        <h1>睡了个午觉</h1>
                         <h2 class="subheading"></h2>
                         <span class="meta">
                             Posted by Stark Yanng on
-                            2017-07-15
+                            2018-08-26
                         </span>
                     </div>
                 
@@ -247,103 +247,18 @@
                 col-md-10 col-md-offset-1
                 post-container">
 
-                <p>小站建成！</p>
-<p><img src="/2017/07/15/Github-page-Hexo%E5%BB%BA%E7%AB%99/home.jpg"></p>
+                <p>中午睡了个午觉，做了一个很长很长的梦，醒过来看手机，才发现只不过睡了半个小时多点。现在的睡眠其实已经好多了，之前在最糟糕的时候，只要一闭上眼，便会进入那种半睡半醒的状态中，思绪任意飞扬，然后便开始做各种奇怪、恐怖的梦，仿佛自己被夹在了现实与梦境的断层里，两边都在疯狂拉扯。最后醒过来的时候头脑会非常的晕和涨，一时间不知道是梦境还是现实。</p>
 <span id="more"></span>
 
-<!-- TOC depthFrom:1 depthTo:6 withLinks:1 updateOnSave:1 orderedList:2 -->
-
-<ul>
-<li><a href="#%E5%87%86%E5%A4%87%E5%B7%A5%E4%BD%9C">准备工作</a></li>
-<li><a href="#%E4%BD%BF%E7%94%A8jekyll%E7%94%9F%E6%88%90%E9%9D%99%E6%80%81%E7%BD%91%E9%A1%B5">使用jekyll生成静态网页</a><ul>
-<li><a href="#%E4%BD%BF%E7%94%A8jekyll%E4%B8%BB%E9%A2%98%E9%80%89%E6%8B%A9%E5%99%A8">使用jekyll主题选择器</a></li>
-</ul>
-</li>
-<li><a href="#%E4%BB%8Ejekyll%E8%BF%81%E7%A7%BB%E5%88%B0hexo">从jekyll迁移到hexo</a><ul>
-<li><a href="#%E5%AE%89%E8%A3%85">安装</a></li>
-<li><a href="#%E5%88%9D%E5%A7%8B%E5%8C%96">初始化</a></li>
-<li><a href="#%E9%85%8D%E7%BD%AE">配置</a></li>
-<li><a href="#%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4">常用命令</a><ul>
-<li><a href="#%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E6%96%B0post">创建一个新post</a></li>
-<li><a href="#%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E6%96%B0%E7%9A%84%E8%8D%89%E7%A8%BF">创建一个新的草稿</a></li>
-<li><a href="#%E5%8F%91%E5%B8%83%E4%B8%80%E4%B8%AA%E8%8D%89%E7%A8%BF">发布一个草稿</a></li>
-<li><a href="#%E5%8F%91%E5%B8%83%E5%88%B0github-page">发布到github page</a></li>
-</ul>
-</li>
-<li><a href="#%E4%BF%AE%E6%94%B9%E4%B8%BB%E9%A2%98">修改主题</a></li>
-</ul>
-</li>
-<li><a href="#%E9%81%87%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98">遇到的问题</a><ul>
-<li><a href="#warn-no-layout-archivesindexhtml">WARN no layout: archives/index.html</a></li>
-<li><a href="#%E5%9B%BE%E7%89%87%E7%9A%84%E6%98%BE%E7%A4%BA%E9%97%AE%E9%A2%98">图片的显示问题</a></li>
-</ul>
-</li>
-<li><a href="#%E5%8F%82%E8%80%83">参考</a></li>
-</ul>
-<!-- /TOC -->
-
-<h1 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h1><p>1.在github上创建一个名为username.github.io的仓库</p>
-<p>2.将该仓库克隆到本地<br><code>$ git clone https://github.com/username/username.github.io</code></p>
-<p>3.在该项目中添加一个新文件</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ cd username.github.io</span><br><span class="line">$ echo &#x27;hello world&#x27; &gt; index.html</span><br></pre></td></tr></table></figure>
-
-<p>4.提交推送到远程仓库</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ git add .</span><br><span class="line">$ git commit -m &quot;Initial commit&quot;</span><br><span class="line">$ git push -u origin master</span><br></pre></td></tr></table></figure>
-
-<p>5.完成，在浏览器中访问[<a href="https://username.github.io]">https://username.github.io]</a></p>
-<h1 id="使用jekyll生成静态网页"><a href="#使用jekyll生成静态网页" class="headerlink" title="使用jekyll生成静态网页"></a>使用jekyll生成静态网页</h1><p>Github pages高度集成了Jekyll，这是一种广泛使用的静态网页生成器，也就是说，Github pages默认使用Jekyll来生成静态网页。</p>
-<h2 id="使用jekyll主题选择器"><a href="#使用jekyll主题选择器" class="headerlink" title="使用jekyll主题选择器"></a>使用jekyll主题选择器</h2><ol>
-<li>进入仓库的设置页面。</li>
-<li>在“Github pages”块中，点击choose theme。</li>
-<li>选择一个主题。</li>
-<li>进入页面预览效果。</li>
-</ol>
-<h1 id="从jekyll迁移到hexo"><a href="#从jekyll迁移到hexo" class="headerlink" title="从jekyll迁移到hexo"></a>从jekyll迁移到hexo</h1><p>比较了三个静态博客生成工具Jekyll,Octopress和Hexo,其中Octopress是基于Jekyll的，两者都是基于Ruby的，而Hexo是基于Node.js的，综合考虑，决定改用Hexo。</p>
-<h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><p>1.环境需求</p>
-<ul>
-<li>Node.js</li>
-<li>Git</li>
-</ul>
-<p>2.安装Hexo<br><code>$ npm install -g hexo-cli</code></p>
-<p>3.安装成功，检测hexo版本<br><code>$ hexo version</code></p>
-<h2 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h2><p>安装完成后，使用如下命令来初始化Hexo：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ hexo init &lt;folder&gt;</span><br><span class="line">$ cd &lt;folder&gt;</span><br><span class="line">$ npm install</span><br></pre></td></tr></table></figure>
-<h2 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h2><p>可以通过修改_config.yml文件来修改Hexo的配置，其中配置项分为如下几类。</p>
-<p>1.站点配置</p>
-<p><img src="/2017/07/15/Github-page-Hexo%E5%BB%BA%E7%AB%99/conf1.png" alt="conf"></p>
-<p>2.URL配置</p>
-<p><img src="/2017/07/15/Github-page-Hexo%E5%BB%BA%E7%AB%99/conf2.jpg" alt="conf"></p>
-<p>3.目录配置</p>
-<p><img src="/2017/07/15/Github-page-Hexo%E5%BB%BA%E7%AB%99/conf3.png" alt="conf1"></p>
-<p>4.书写配置</p>
-<p><img src="/2017/07/15/Github-page-Hexo%E5%BB%BA%E7%AB%99/conf4.jpg" alt="conf1"></p>
-<p>5.目录和标签配置</p>
-<p><img src="/2017/07/15/Github-page-Hexo%E5%BB%BA%E7%AB%99/conf5.jpg" alt="conf1"></p>
-<p>6.日期和时间配置</p>
-<p><img src="/2017/07/15/Github-page-Hexo%E5%BB%BA%E7%AB%99/conf6.jpg" alt="conf1"></p>
-<h2 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h2><h3 id="创建一个新post"><a href="#创建一个新post" class="headerlink" title="创建一个新post"></a>创建一个新post</h3><p><code>$ hexo new [layout] &lt;title&gt;</code></p>
-<h3 id="创建一个新的草稿"><a href="#创建一个新的草稿" class="headerlink" title="创建一个新的草稿"></a>创建一个新的草稿</h3><p><code>$ hexo new draft &lt;layout&gt; titlename</code></p>
-<h3 id="发布一个草稿"><a href="#发布一个草稿" class="headerlink" title="发布一个草稿"></a>发布一个草稿</h3><p><code>$ hexo publish titlename</code></p>
-<h3 id="发布到github-page"><a href="#发布到github-page" class="headerlink" title="发布到github page"></a>发布到github page</h3><p>1.安装hexo-deploy-git<br><code>$ npm install hexo-deploy-git --save</code></p>
-<p>2.修改_config.yml配置文件</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">deploy:</span><br><span class="line">  type:git</span><br><span class="line">  repo:&lt;repository url&gt;</span><br><span class="line">  branch:&lt;branch&gt;</span><br><span class="line">  message:&lt;message&gt;</span><br></pre></td></tr></table></figure>
-
-<p>3.生成静态页面<br><code>$ hexo generate</code></p>
-<p>4.在本地生成站点，预览效果<br><code>$ hexo server</code></p>
-<p>5.在本地预览包括草稿draft在内的效果<br><code>$ hexo server --draft</code></p>
-<p>6.部署<br><code>$ hexo deploy</code></p>
-<h2 id="修改主题"><a href="#修改主题" class="headerlink" title="修改主题"></a>修改主题</h2><p>1.安装主题<br><code>$ git clone https://github.com/litten/hexo-theme-yilia.git themes/yilia</code></p>
-<p>2.配置主题<br>修改_config.yml配置文件:<br><code>theme:yilia</code></p>
-<p>3.更新主题</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ cd themes/yilia</span><br><span class="line">$ git pull</span><br></pre></td></tr></table></figure>
-
-<h1 id="遇到的问题"><a href="#遇到的问题" class="headerlink" title="遇到的问题"></a>遇到的问题</h1><h2 id="WARN-no-layout-archives-index-html"><a href="#WARN-no-layout-archives-index-html" class="headerlink" title="WARN no layout: archives/index.html"></a>WARN no layout: archives/index.html</h2><p>解决：原因是主题没有安装，安装主题并修改配置文件即可.</p>
-<h2 id="图片的显示问题"><a href="#图片的显示问题" class="headerlink" title="图片的显示问题"></a>图片的显示问题</h2><p>markdown插入图片的语法是<code>![name](path/img.jpg)</code>。问题在于图片的路径问题，使用了本地的相对路径后，到服务器上就显示不出来了，因为文件渲染后图片的路径变了。</p>
-<p>解决办法是：<br>1.将_config.yml配置文件里的post_asset_folder属性设为true.<br>2.安装插件:<code>npm install https://github.com/CodeFalling/hexo-asset-image --save</code><br>3.这样下次新创建一个post时，就会在_posts目录下创建一个与post同名的文件夹，post中所需要的资源文件就放在这个文件夹里。图片引用方式：<code>![name](postname/img.jpg)</code></p>
-<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><ul>
-<li><a target="_blank" rel="noopener" href="http://litten.me/">litten的主页</a></li>
-<li><a target="_blank" rel="noopener" href="https://hexo.io/docs/">Hexo官方文档</a></li>
-</ul>
+<p>这让我想起了我的小时候，夏天经常会睡个午觉一睡就睡到傍晚，迷迷糊糊地醒过来，发现窗子外边已经暗了，觉得整个世界安静了下来。然后过会儿就吃晚饭了。我妈早上要去地里干活，就把我锁在家里，我醒了看家里一个人也没有，也出不去，就一边哭一边往门上撒尿。不过至于我妈回到家看到门口一滩尿是什么反应，我倒记不起来了。</p>
+<p>不过很多时候，我妈去地里干活都是要把我带上的。她在棉花地里除草，我就在躺在棉花地里睡觉。那时个很矮，一根根的棉花茎对于我来说就像一棵棵树一样。要小便了随便找个地，要大便了随便挖个坑。就因为我妈老是把我带到地里，导致了我从小就比别人黑一截。</p>
+<p>在没被带到地里的时候，到了傍晚我就站在村口等我妈回来。每次我都想要通过我妈当天穿的衣服的颜色来认出我妈，可每次都硬是想不起来我妈当天穿的什么颜色的衣服。这点我到现在印象还非常深刻。然后天色渐渐暗下来，我就只能看到一个一个的人影了。</p>
+<p>小时候的暑假应该是整个童年最快乐的时光了。我记得那时候每年的暑假我都是和两个小伙伴一起度过的，都是和我从小一起玩到大的。我们一起去钓鱼，我还记得我第一次钓鱼的情景，头天晚上我激动地一晚上醒了好几次，然后第二天第一条鱼还是一个大哥哥帮我钓上来的，只有一寸多长，我就举着鱼竿，鱼竿的钩子上挂着那条鱼，一路跑回去给我妈看。钓鱼最开心的一瞬间，就是鱼上钩的那一刻，你可以在拉鱼竿的那一刹那感受到鱼的重量。傍晚是鱼最多的时候，这个时候桥上两边都是要坐满钓鱼的人的，有时候我的作业还没写完，也忍不住拿上我的鱼竿，提上我的小水桶，去钓他个几杆。</p>
+<p>除了钓鱼，我和我的小伙伴还喜欢做的另一件事就是“做饭”。其实就是和过家家差不多，我们会去人家种的蔬菜田里，偷择一点蔬菜，然后去河边，找几块砖搭一个”灶“，找一堆芦苇杆做“柴火”，再找一个铁盒子做“锅”，然后就可以做饭了。盒子里放点水，把蔬菜放进去，也没有调料，最后大家却总是抢着喝光的。有时候运气好，会碰到几个捕鱼的，我们问人家要，人家也会给我们几条鱼，但我们都不会打理，最后也就糟蹋了。除了这些，我们有时候也会烤红薯、茄子等，还会跑到人家地里偷吃生的蚕豆。说到“偷”，小时候可偷了不少东西，除了蚕豆，还有人家树上长的桃子、橘子、枇杷，这些都偷过。</p>
+<p>现在那两个小伙伴，一个在我高中的时候走了，另一个也早已经不认识了。</p>
+<p>我这样信马由缰地写着，但童年的那些记忆却是怎么也写不完的，但是我想记下来一部分，以后想看的时候就可以看看。</p>
+<p>我常常会想到我的童年，我想那会是我这一生最快乐的时光了。有人说，一个人过得不快乐，他才会经常回忆过去。但是客观地讲，我对我现在的生活应该是非常满意的。</p>
+<p>2018/08/26，万福里小区。</p>
 
                 
 
@@ -352,9 +267,13 @@
                 <ul class="pager">
                     
                         <li class="previous">
-                            <a href="/2018/06/21/Quartz入门/" data-toggle="tooltip" data-placement="top" title="教程——Quartz入门">&larr; 上一篇</a>
+                            <a href="/2019/11/03/Java中的AtomicLong和LongAdder/" data-toggle="tooltip" data-placement="top" title="阅读源码——Java中的AtomicLong和LongAdder">&larr; 上一篇</a>
                         </li>
                     
+                    
+                        <li class="next">
+                            <a href="/2018/07/20/Quartz源码分析之任务的调度和执行/" data-toggle="tooltip" data-placement="top" title="阅读源码——Quartz源码分析之任务的调度和执行">下一篇 &rarr;</a>
+                        </li>
                     
                 </ul>
 
@@ -398,7 +317,7 @@
                     <h5><a href="/tags/">标签云</a></h5>
                     <div class="tags">
                        
-                          <a class="tag" href="/tags/#好奇心" title="好奇心">好奇心</a>
+                          <a class="tag" href="/tags/#sleepingtalk" title="sleepingtalk">sleepingtalk</a>
                         
                     </div>
                 </section>
@@ -573,7 +492,7 @@
 <script>
     // only load tagcloud.js in tag.html
     if($('#tag_cloud').length !== 0){
-        async("http://starkyanng.github.io/2017/07/15/Github-page-Hexo%E5%BB%BA%E7%AB%99/index.html/js/jquery.tagcloud.js",function(){
+        async("http://starkyanng.github.io/2018/08/26/%E7%9D%A1%E4%BA%86%E4%B8%AA%E5%8D%88%E8%A7%89/index.html/js/jquery.tagcloud.js",function(){
             $.fn.tagcloud.defaults = {
                 //size: {start: 1, end: 1, unit: 'em'},
                 color: {start: '#bbbbee', end: '#0085a1'},

@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Stark Yanng">
+    <meta name="keyword"  content="Stark Yanng">
+    <link rel="shortcut icon" href="/img/ironman-draw.png">
+    <!-- Place this tag in your head or just before your close body tag. -->
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
+    <title>
+        
+          阅读源码——Java中的AtomicLong和LongAdder - Stark Yanng
+        
+    </title>
+
+    <link rel="canonical" href="http://starkyanng.github.io/2019/11/03/Java中的AtomicLong和LongAdder/">
+
+    <!-- Bootstrap Core CSS -->
+
+   
+<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.4.1/css/bootstrap.min.css">
+
+
+    
+
+    <!-- Custom CSS --> 
+    
+<link rel="stylesheet" href="/css/beantech.min.css">
+
+
+    
+<link rel="stylesheet" href="/css/donate.css">
+
+	
+<link rel="stylesheet" href="/css/w3.css">
+
+    <!-- Pygments Highlight CSS -->
+    
+<link rel="stylesheet" href="/css/highlight.css">
+
+
+    
+<link rel="stylesheet" href="/css/widget.css">
+
+
+    
+<link rel="stylesheet" href="/css/rocket.css">
+
+
+    
+<link rel="stylesheet" href="/css/signature.css">
+
+
+    
+<link rel="stylesheet" href="/css/toc.css">
+
+
+    <!-- Custom Fonts -->
+    <!-- <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="https://cdn.staticfile.org/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <!-- Hux Delete, sad but pending in China
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/
+    css'>
+    -->
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+	
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+	<!-- Modified by Yu-Hsuan Yen -->
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+    }
+   .post-heading{
+    padding:20px;
+    }
+  .person {
+    border: 10px solid transparent;
+    margin-bottom: 25px;
+    width: 80%;
+    height: 80%;
+    opacity: 0.7;
+  }
+  .person:hover {
+    border-color: #f1f1f1;
+  }
+
+</style>
+
+<header id="headerid" class="w3-indigo intro-header" style="position:relative;">
+    <!-- Signature -->
+	
+        <div class="container">
+            <div class=" row" >
+			
+			<canvas id="particles-js-canvas" style="position:absolute;z-index:1;top:0px;left:0px;" width="100%" height="50%"></canvas>
+			
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1" style="z-index:2;">
+                
+                    <div class="post-heading" style="padding:40px">
+                        <div class="tags">
+                            
+                              <a class="tag" href="/tags/#Java" title="Java">Java</a>
+                            
+                              <a class="tag" href="/tags/#源码分析" title="源码分析">源码分析</a>
+                            
+                        </div>
+                        <h1>阅读源码——Java中的AtomicLong和LongAdder</h1>
+                        <h2 class="subheading"></h2>
+                        <span class="meta">
+                            Posted by Stark Yanng on
+                            2019-11-03
+                        </span>
+                    </div>
+                
+                </div>
+            </div>
+        </div>
+  
+</header>
+
+	
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Stark Yanng</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a  href="/">主页</a>
+                    </li>
+		    
+                    
+
+                        
+                        <li>
+           
+                            <a  href="/技术人生">技术人生</a>
+                           
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+           
+                            <a  href="/我的梦呓">我的梦呓</a>
+                           
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+           
+                            <a  href="/好奇心">好奇心</a>
+                           
+                        </li>
+                        
+                    
+                    
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+
+    <!-- Main Content -->
+    <!-- Modify by Yu-Hsuan Yen -->
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+            <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <p>一个计数器<code>counter</code>，要实现它的计数操作<code>counter++</code>，其实包括以下三个步骤：</p>
+<ol>
+<li>读取counter的值</li>
+<li>将counter的值+1</li>
+<li>更新counter的值</li>
+</ol>
+<span id="more"></span>
+
+<p>因此要保证计数器的线程安全，就要保证累加操作的互斥性，最简单的就是通过加锁的方式：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">private Long counter = 0;</span><br><span class="line">Object lock = new Object();</span><br><span class="line"></span><br><span class="line">public void increment() &#123;</span><br><span class="line">    sychronized(lock) &#123;</span><br><span class="line">        counter++;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这样就可以保证计数器的线程安全了，但是当并发量特别大的时候，采用这种锁的方式的性能就会下降。</p>
+<p>因此JDK中专门提供了一系列的线程安全的计数器实现，主要包括AtomicLong和LongAdder。两者都是<code>concurrent</code>并发包下的工具类，前者是在1.5版本中引入的，而后者是在1.8版本中引入的，拥有更高的并发性能。</p>
+<h1 id="AtomicLong"><a href="#AtomicLong" class="headerlink" title="AtomicLong"></a>AtomicLong</h1><h2 id="基本用法"><a href="#基本用法" class="headerlink" title="基本用法"></a>基本用法</h2><p>使用<code>AtomicLong</code>实现一个计数器：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">private static AtomicLong counter = new AtomicLong();</span><br><span class="line"></span><br><span class="line">public static void main(String[] args) &#123;</span><br><span class="line">    ExecutorService executorService = new ThreadPoolExecutor(5, 10, 10, TimeUnit.SECONDS,</span><br><span class="line">            new LinkedBlockingDeque&lt;&gt;());</span><br><span class="line"></span><br><span class="line">    int count = 1_000_000;</span><br><span class="line">    CountDownLatch latch = new CountDownLatch(count);</span><br><span class="line"></span><br><span class="line">    for (int i = 0; i &lt; count; i++) &#123;</span><br><span class="line">        executorService.execute(() -&gt; &#123;</span><br><span class="line">            counter.getAndIncrement();</span><br><span class="line"></span><br><span class="line">            latch.countDown();</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    try &#123;</span><br><span class="line">        latch.await();</span><br><span class="line">    &#125; catch (InterruptedException e) &#123;</span><br><span class="line">        e.printStackTrace();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    executorService.shutdown();</span><br><span class="line"></span><br><span class="line">    System.out.println(counter.get());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="源码分析"><a href="#源码分析" class="headerlink" title="源码分析"></a>源码分析</h2><p><code>AtomicLong</code>继承自<code>Number</code>类，表示一种数字，可以获取这个数字不同类型的值：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">public abstract int intValue();</span><br><span class="line">public abstract long longValue();</span><br><span class="line">public abstract float floatValue();</span><br><span class="line">public abstract double doubleValue();</span><br></pre></td></tr></table></figure>
+
+<h3 id="成员属性"><a href="#成员属性" class="headerlink" title="成员属性"></a>成员属性</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">// 表示计数器的值</span><br><span class="line">private volatile long value;</span><br><span class="line"></span><br><span class="line">// Unsafe对象</span><br><span class="line">private static final jdk.internal.misc.Unsafe U = jdk.internal.misc.Unsafe.getUnsafe();</span><br><span class="line">// value在内存中的地址</span><br><span class="line">private static final long VALUE = U.objectFieldOffset(AtomicLong.class, &quot;value&quot;);</span><br></pre></td></tr></table></figure>
+
+<p>其中最主要的就是一个表示计数器值的long类型的变量。后面两个在分析成员方法时还会看到。</p>
+<h3 id="成员方法"><a href="#成员方法" class="headerlink" title="成员方法"></a>成员方法</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">// +1操作并返回计数器的值</span><br><span class="line">public final long incrementAndGet();</span><br><span class="line">// -1操作并返回计数器的值</span><br><span class="line">public final long decrementAndGet();</span><br><span class="line">// 先返回计数器的值再加上delta</span><br><span class="line">public final long getAndAdd(long delta);</span><br><span class="line">// 先加上delta再返回计数器的值，两者的区别相当于a++和++a</span><br><span class="line">public final long addAndGet(long delta);</span><br></pre></td></tr></table></figure>
+
+<p>首先看<code>incrementAndGet()</code>方法：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">public final long incrementAndGet() &#123;</span><br><span class="line">    return U.getAndAddLong(this, VALUE, 1L) + 1L;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>发现只是调用了<code>Unsafe</code>的<code>getAndAddLong</code>方法：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">public final long getAndAddLong(Object o, long offset, long delta) &#123;</span><br><span class="line">    long v;</span><br><span class="line">    do &#123;</span><br><span class="line">    // 先获取这个时间点计数器的值</span><br><span class="line">        v = getLongVolatile(o, offset);</span><br><span class="line">    // 更新计数器的值，如果更新失败则重试</span><br><span class="line">    &#125; while (!weakCompareAndSetLong(o, offset, v, v + delta));</span><br><span class="line">    return v;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>其中最核心的方法是：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">public final boolean weakCompareAndSetLong(Object o, long offset, long expected, long x) &#123;</span><br><span class="line">    return compareAndSetLong(o, offset, expected, x);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>然后就是<code>compareAndSetLong</code>:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">public final native boolean compareAndSetLong(Object o, long offset, long expected, long x);</span><br></pre></td></tr></table></figure>
+<p>这个方法是native的，其实底层就是硬件的CAS（compare and swap）操作，这个操作可以通过一种无锁的方式来保证更新操作的互斥性，它需要三个参数：</p>
+<ul>
+<li>待更新数值的内存地址</li>
+<li>该内存地址上的期望值</li>
+<li>更新后的值</li>
+</ul>
+<p>如果该内存地址上的实际值等于期望值，则说明这期间没有其它线程修改过，可以更新值为新的值，返回true；否则返回false。</p>
+<p>可以看出这个方法不能保证一次就更新成功，因此要配合的最佳实践就是如<code>getAndAddLong</code>方法中所示的采用while不断重试，直到成功为止。</p>
+<p>然后其它方法和<code>getAndAddLong()</code>类似，都是基于CAS机制，采用无锁的方法来保证计数器在高并发量场景下的性能。</p>
+<h1 id="LongAdder"><a href="#LongAdder" class="headerlink" title="LongAdder"></a>LongAdder</h1><h2 id="基本用法-1"><a href="#基本用法-1" class="headerlink" title="基本用法"></a>基本用法</h2><p>利用LongAdder实现一个线程安全的计数器：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">private static LongAdder counter = new LongAdder();</span><br><span class="line"></span><br><span class="line">public static void main(String[] args) &#123;</span><br><span class="line">    ExecutorService executorService = new ThreadPoolExecutor(5, 10, 10, TimeUnit.SECONDS,</span><br><span class="line">            new LinkedBlockingDeque&lt;&gt;());</span><br><span class="line"></span><br><span class="line">    int count = 1_000_000;</span><br><span class="line">    CountDownLatch latch = new CountDownLatch(count);</span><br><span class="line"></span><br><span class="line">    for (int i = 0; i &lt; count; i++) &#123;</span><br><span class="line">        executorService.execute(() -&gt; &#123;</span><br><span class="line">            counter.increment();</span><br><span class="line"></span><br><span class="line">            latch.countDown();</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    try &#123;</span><br><span class="line">        latch.await();</span><br><span class="line">    &#125; catch (InterruptedException e) &#123;</span><br><span class="line">        e.printStackTrace();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    executorService.shutdown();</span><br><span class="line"></span><br><span class="line">    System.out.println(counter.longValue());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="源码分析-1"><a href="#源码分析-1" class="headerlink" title="源码分析"></a>源码分析</h2><p><code>LongAdder</code>继承了<code>Striped64</code>类，然后<code>Striped64</code>也同样继承了<code>Number</code>类。</p>
+<h3 id="成员属性-1"><a href="#成员属性-1" class="headerlink" title="成员属性"></a>成员属性</h3><p>JDK1.8引入了一个新的<code>Cell</code>类，相当于<code>AtomicLong</code>的一个变种。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">static final class Cell &#123;</span><br><span class="line">    volatile long value;</span><br><span class="line">    // cas方法</span><br><span class="line">    final boolean cas(long cmp, long val) &#123;</span><br><span class="line">        return VALUE.compareAndSet(this, cmp, val);</span><br><span class="line">    &#125;</span><br><span class="line">    final void reset() &#123;</span><br><span class="line">        VALUE.setVolatile(this, 0L);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    final long getAndSet(long val) &#123;</span><br><span class="line">        return (long)VALUE.getAndSet(this, val);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // value属性的引用</span><br><span class="line">    private static final VarHandle VALUE;</span><br><span class="line">    static &#123;</span><br><span class="line">        try &#123;</span><br><span class="line">            MethodHandles.Lookup l = MethodHandles.lookup();</span><br><span class="line">            VALUE = l.findVarHandle(Cell.class, &quot;value&quot;, long.class);</span><br><span class="line">        &#125; catch (ReflectiveOperationException e) &#123;</span><br><span class="line">            throw new ExceptionInInitializerError(e);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>stripped64</code>类的主要成员属性：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">// Cell数组，一个LongAdder相当于多个AtomicLong的集合</span><br><span class="line">transient volatile Cell[] cells;</span><br><span class="line">transient volatile long base;</span><br><span class="line">transient volatile int cellsBusy;</span><br><span class="line"></span><br><span class="line">// 变量的内存引用</span><br><span class="line">private static final VarHandle BASE;</span><br><span class="line">private static final VarHandle CELLSBUSY;</span><br><span class="line">private static final VarHandle THREAD_PROBE;</span><br></pre></td></tr></table></figure>
+
+
+<h3 id="成员方法-1"><a href="#成员方法-1" class="headerlink" title="成员方法"></a>成员方法</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">// 计数器+1</span><br><span class="line">public void increment();</span><br><span class="line">// 计数器-1</span><br><span class="line">public void decrement();</span><br><span class="line">// 计数器+x</span><br><span class="line">public void add(long x);</span><br><span class="line">// 获取计数器的值</span><br><span class="line">public long sum();</span><br><span class="line">// 重置计数器</span><br><span class="line">public void reset()</span><br></pre></td></tr></table></figure>
+
+<p>其中<code>increment()</code>和<code>decrement()</code>方法都是通过调用<code>add(long x)</code>方法，因此主要看<code>add</code>方法。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">public void add(long x) &#123;</span><br><span class="line">    Cell[] cs; long b, v; int m; Cell c;</span><br><span class="line">    // 尝试利用cas更新计数器的base值，如果失败则进行初始化或扩容操作</span><br><span class="line">    if ((cs = cells) != null || !casBase(b = base, b + x)) &#123;</span><br><span class="line">        boolean uncontended = true;</span><br><span class="line">        if (cs == null || (m = cs.length - 1) &lt; 0 ||</span><br><span class="line">            (c = cs[getProbe() &amp; m]) == null ||</span><br><span class="line">            !(uncontended = c.cas(v = c.value, v + x)))</span><br><span class="line">            longAccumulate(x, null, uncontended);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>其中最核心的是初始化和扩容方法<code>longAccumulate()</code>:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br></pre></td><td class="code"><pre><span class="line">final void longAccumulate(long x, LongBinaryOperator fn, boolean wasUncontended) &#123;</span><br><span class="line">    // 获取当前线程的探针标志，用于定位当前线程对应的cell</span><br><span class="line">    int h;</span><br><span class="line">    if ((h = getProbe()) == 0) &#123;</span><br><span class="line">        // 初始化当前线程的探针标志</span><br><span class="line">        ThreadLocalRandom.current();</span><br><span class="line">        h = getProbe();</span><br><span class="line">        wasUncontended = true;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // 无限循环</span><br><span class="line">    done: for (;;) &#123;</span><br><span class="line">        Cell[] cs; Cell c; int n; long v;</span><br><span class="line">        // 如果cells已初始化</span><br><span class="line">        if ((cs = cells) != null &amp;&amp; (n = cs.length) &gt; 0) &#123;</span><br><span class="line">            // 如果当前线程对应的cell不存在，则创建一个新的cell</span><br><span class="line">            if ((c = cs[(n - 1) &amp; h]) == null) &#123;</span><br><span class="line">                if (cellsBusy == 0) &#123;       </span><br><span class="line">                    Cell r = new Cell(x);</span><br><span class="line">                    // 加锁</span><br><span class="line">                    if (cellsBusy == 0 &amp;&amp; casCellsBusy()) &#123;</span><br><span class="line">                        try &#123;             </span><br><span class="line">                            Cell[] rs; int m, j;</span><br><span class="line">                            if ((rs = cells) != null &amp;&amp;</span><br><span class="line">                                (m = rs.length) &gt; 0 &amp;&amp;</span><br><span class="line">                                rs[j = (m - 1) &amp; h] == null) &#123;</span><br><span class="line">                                // 放到对应的位置</span><br><span class="line">                                rs[j] = r;</span><br><span class="line">                                break done;</span><br><span class="line">                            &#125;</span><br><span class="line">                        &#125; finally &#123;</span><br><span class="line">                            // 释放锁</span><br><span class="line">                            cellsBusy = 0;</span><br><span class="line">                        &#125;</span><br><span class="line">                        continue;        </span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            // 尝试更新当前线程对应的cell的值，如果更新成功则直接结束</span><br><span class="line">            else if (c.cas(v = c.value,</span><br><span class="line">                           (fn == null) ? v + x : fn.applyAsLong(v, x)))</span><br><span class="line">                break;</span><br><span class="line">            // 加锁进行扩容，容量加倍，保持cells的大小为2的n次方</span><br><span class="line">            else if (cellsBusy == 0 &amp;&amp; casCellsBusy()) &#123;</span><br><span class="line">                try &#123;</span><br><span class="line">                    if (cells == cs)       </span><br><span class="line">                        cells = Arrays.copyOf(cs, n &lt;&lt; 1);</span><br><span class="line">                &#125; finally &#123;</span><br><span class="line">                    // 释放锁</span><br><span class="line">                    cellsBusy = 0;</span><br><span class="line">                &#125;</span><br><span class="line">                continue;                </span><br><span class="line">            &#125;</span><br><span class="line">            // 更新线程的探针标志</span><br><span class="line">            h = advanceProbe(h);</span><br><span class="line">        &#125;</span><br><span class="line">        // 初始化cells，大小为2</span><br><span class="line">        else if (cellsBusy == 0 &amp;&amp; cells == cs &amp;&amp; casCellsBusy()) &#123;</span><br><span class="line">            try &#123;                        </span><br><span class="line">                if (cells == cs) &#123;</span><br><span class="line">                    Cell[] rs = new Cell[2];</span><br><span class="line">                    rs[h &amp; 1] = new Cell(x);</span><br><span class="line">                    cells = rs;</span><br><span class="line">                    break done;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125; finally &#123;</span><br><span class="line">                cellsBusy = 0;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>上述过程的流程图如下，对照着图看更清晰。</p>
+<p><code>add</code>方法：<br><img src="/2019/11/03/Java%E4%B8%AD%E7%9A%84AtomicLong%E5%92%8CLongAdder/LongAdder%E5%88%86%E6%9E%901.png"></p>
+<p><code>longAccumulate</code>方法：<br><img src="/2019/11/03/Java%E4%B8%AD%E7%9A%84AtomicLong%E5%92%8CLongAdder/LongAdder%E5%88%86%E6%9E%902.png"></p>
+<p>最后获取计数器的值的<code>sum()</code>方法就很简单了，直接将各个cell里的值相加求和就可以了：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">public long sum() &#123;</span><br><span class="line">    Cell[] cs = cells;</span><br><span class="line">    long sum = base;</span><br><span class="line">    if (cs != null) &#123;</span><br><span class="line">        for (Cell c : cs)</span><br><span class="line">            if (c != null)</span><br><span class="line">                sum += c.value;</span><br><span class="line">    &#125;</span><br><span class="line">    return sum;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>总的来说，<code>AtomicLong</code>和<code>LongAdder</code>也是通过CAS操作来保证计数器的线程安全，但是在高并发场景下，<code>LongAdder</code>拥有更好的性能，这是因为<code>LongAdder</code>利用了一个<code>Cell</code>数组，分散了对计数器的操作热点，两者的区别示意图如下，最后将每个cell里的值相加即可。本质上是用空间换时间。</p>
+<p><img src="/2019/11/03/Java%E4%B8%AD%E7%9A%84AtomicLong%E5%92%8CLongAdder/LongAdder%E5%88%86%E6%9E%903.png"></p>
+<p>完。</p>
+
+                
+
+                <hr>
+                <!-- Pager -->
+                <ul class="pager">
+                    
+                        <li class="previous">
+                            <a href="/2021/08/15/JAVA串点成线——对象/" data-toggle="tooltip" data-placement="top" title="JAVA串点成线——对象">&larr; 上一篇</a>
+                        </li>
+                    
+                    
+                        <li class="next">
+                            <a href="/2018/08/26/睡了个午觉/" data-toggle="tooltip" data-placement="top" title="睡了个午觉">下一篇 &rarr;</a>
+                        </li>
+                    
+                </ul>
+
+                <br>
+
+                <!--打赏-->
+                
+                <!--打赏-->
+
+                <br>
+                <!--分享-->
+                
+                <!--分享-->
+                <br>                       
+                
+                <!-- require APlayer -->
+                
+
+                <!-- disqus comment start -->
+                
+                <!-- disqus comment end -->
+
+                
+				
+            </div>
+
+            <!-- Tabe of Content -->
+            <!-- Table of Contents -->
+
+                
+            <!-- Sidebar Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5><a href="/tags/">标签云</a></h5>
+                    <div class="tags">
+                       
+                          <a class="tag" href="/tags/#Java" title="Java">Java</a>
+                        
+                          <a class="tag" href="/tags/#源码分析" title="源码分析">源码分析</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+                <hr>
+                <h5>FRIENDS</h5>
+                <ul class="list-inline">
+
+                    
+                        <li><a href="https://coolshell.cn" target="_blank">coolshell</a></li>
+                    
+                </ul>
+                
+            </div>
+        </div>
+    </div>
+</article>
+
+
+
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("https://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'hover',
+          placement: 'left',
+          icon: 'ℬ'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+
+
+    <!-- Footer -->
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                
+                
+                
+
+                
+
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://github.com/starkyanng">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; Stark Yanng 2021 
+                    <br>
+                    Powered by <a target="_blank" rel="noopener" href="http://www.hexo.io">Hexo</a> 
+                    <span style="display: inline-block; margin: 0 5px;">
+                        <i class="fa fa-heart"></i>
+                    </span> 
+                    Theme by <a target="_blank" rel="noopener" href="https://github.com/kinggozhang/hexo-theme-ace">ACE</a> 
+					
+					
+					<i class="fa fa-eye" id="leancounter"></i>
+					
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+
+   
+<script src="https://cdn.staticfile.org/jquery/2.2.4/jquery.min.js"></script>
+
+
+
+
+<!-- Bootstrap Core JavaScript -->
+
+   
+<script src="https://cdn.staticfile.org/twitter-bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+
+
+<!-- Custom Theme JavaScript -->
+
+<script src="/js/hux-blog.min.js"></script>
+
+
+
+	
+<script src="/js/particles.js"></script>
+
+	
+<script src="/js/particles_config.js"></script>
+
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- 
+     Because of the native support for backtick-style fenced code blocks 
+     right within the Markdown is landed in Github Pages, 
+     From V1.6, There is no need for Highlight.js, 
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0  
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/    
+-->
+<!--
+    <script>
+        async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("http://starkyanng.github.io/2019/11/03/Java%E4%B8%AD%E7%9A%84AtomicLong%E5%92%8CLongAdder/index.html/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("https://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+
+
+
+<!-- Baidu Tongji -->
+
+
+
+
+
+
+	<a id="rocket" href="#top" class=""></a>
+	<script type="text/javascript" src="/js/totop.js?v=1.0.0" async=""></script>
+    <script type="text/javascript" src="/js/toc.js?v=1.0.0" async=""></script>
+<!-- Image to hack wechat -->
+<img src="http://starkyanng.github.io/img/icon_wechat.png" width="0" height="0" />
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>

@@ -250,6 +250,233 @@
 
 
 <div class="w3-row-padding">
+	<a href="/2021/08/15/JAVA串点成线——对象/">
+        <h2 class="post-title">
+            JAVA串点成线——对象
+        </h2>
+        <h3 class="post-subtitle">
+            
+        </h3>
+	</a>
+
+<div>
+
+    <a href="/2021/08/15/JAVA串点成线——对象/">
+
+        <div class="post-content-preview">
+            
+什么是对象在JAVA中，一切皆为对象。对象是类的实例，给类的所有属性赋值。
+对象分为类对象和实例对象，实例对象很好理解。而类对象是Class类的一个实例，用来描述某个类或某个接口的定义。Class类的构造方法是私有的，这意味着类对象是不能被new出来的，而是由JVM在加载类的时候通过ClassLoader的defineClass方法自动创建的（这应该也意味着类对象都是单例的）。如果想.........
+        </div>
+    </a>
+    
+        <p class="post-meta">
+            Posted by Stark Yanng on
+            2021-08-15
+        </p>
+    
+
+</div>
+</div>
+<hr>
+
+
+<div class="w3-row-padding">
+	<a href="/2019/11/03/Java中的AtomicLong和LongAdder/">
+        <h2 class="post-title">
+            阅读源码——Java中的AtomicLong和LongAdder
+        </h2>
+        <h3 class="post-subtitle">
+            
+        </h3>
+	</a>
+
+<div>
+
+    <a href="/2019/11/03/Java中的AtomicLong和LongAdder/">
+
+        <div class="post-content-preview">
+            一个计数器counter，要实现它的计数操作counter++，其实包括以下三个步骤：
+
+读取counter的值
+将counter的值+1
+更新counter的值
+
+
+
+因此要保证计数器的线程安全，就要保证累加操作的互斥性，最简单的就是通过加锁的方式：
+12345678private Long counter = 0;Object lock = new Object();public .........
+        </div>
+    </a>
+    
+        <p class="post-meta">
+            Posted by Stark Yanng on
+            2019-11-03
+        </p>
+    
+
+</div>
+</div>
+<hr>
+
+
+<div class="w3-row-padding">
+	<a href="/2018/08/26/睡了个午觉/">
+        <h2 class="post-title">
+            睡了个午觉
+        </h2>
+        <h3 class="post-subtitle">
+            
+        </h3>
+	</a>
+
+<div>
+
+    <a href="/2018/08/26/睡了个午觉/">
+
+        <div class="post-content-preview">
+            中午睡了个午觉，做了一个很长很长的梦，醒过来看手机，才发现只不过睡了半个小时多点。现在的睡眠其实已经好多了，之前在最糟糕的时候，只要一闭上眼，便会进入那种半睡半醒的状态中，思绪任意飞扬，然后便开始做各种奇怪、恐怖的梦，仿佛自己被夹在了现实与梦境的断层里，两边都在疯狂拉扯。最后醒过来的时候头脑会非常的晕和涨，一时间不知道是梦境还是现实。
+
+
+这让我想起了我的小时候，夏天经常会睡个午觉一睡.........
+        </div>
+    </a>
+    
+        <p class="post-meta">
+            Posted by Stark Yanng on
+            2018-08-26
+        </p>
+    
+
+</div>
+</div>
+<hr>
+
+
+<div class="w3-row-padding">
+	<a href="/2018/07/20/Quartz源码分析之任务的调度和执行/">
+        <h2 class="post-title">
+            阅读源码——Quartz源码分析之任务的调度和执行
+        </h2>
+        <h3 class="post-subtitle">
+            
+        </h3>
+	</a>
+
+<div>
+
+    <a href="/2018/07/20/Quartz源码分析之任务的调度和执行/">
+
+        <div class="post-content-preview">
+            上篇分析完了Quartz中任务的存储，这一篇分析一下Quartz中的任务是如何调度和执行的。
+
+
+
+
+
+调度线程quartzschedulerthread
+获取到达触发时间的triggers
+触发triggers
+执行所有triggers对应的jobs
+构造job的执行环境
+在子线程中执行job任务
+
+
+
+
+
+
+
+上一篇提到QuartzScheduler类，这是Quartz实际意义上的.........
+        </div>
+    </a>
+    
+        <p class="post-meta">
+            Posted by Stark Yanng on
+            2018-07-20
+        </p>
+    
+
+</div>
+</div>
+<hr>
+
+
+<div class="w3-row-padding">
+	<a href="/2018/07/13/Quartz源码分析之任务存储/">
+        <h2 class="post-title">
+            阅读源码——Quartz源码分析之任务存储
+        </h2>
+        <h3 class="post-subtitle">
+            
+        </h3>
+	</a>
+
+<div>
+
+    <a href="/2018/07/13/Quartz源码分析之任务存储/">
+
+        <div class="post-content-preview">
+            这一篇主要分析了Quartz中存储Job和Trigger部分的源码。
+
+
+Quartz的基本使用如下：
+1234567891011121314151617181920212223// 实例化一个调度器工厂，每个应用只有唯一一个工厂实例SchedulerFactory schedFact = new org.quartz.impl.StdSchedulerFactory();// 实例化.........
+        </div>
+    </a>
+    
+        <p class="post-meta">
+            Posted by Stark Yanng on
+            2018-07-13
+        </p>
+    
+
+</div>
+</div>
+<hr>
+
+
+<div class="w3-row-padding">
+	<a href="/2018/06/21/Quartz入门/">
+        <h2 class="post-title">
+            教程——Quartz入门
+        </h2>
+        <h3 class="post-subtitle">
+            
+        </h3>
+	</a>
+
+<div>
+
+    <a href="/2018/06/21/Quartz入门/">
+
+        <div class="post-content-preview">
+            Quartz是一个基于Java的开源的企业级任务调度框架，能够支持从数十到上万个Job的任务调度，并且Job被定义为一个个单独的组件，降低了框架的侵入性，提高了代码复用度，方便迁移。
+
+
+
+作为一个企业级的任务调度框架，Quartz拥有一系列企业级特性：
+
+支持Job的持久化
+支持事务机制
+支持分布式集群
+支持各种Job/Trigger行为相关的监听器
+支持插件机制，可以为Quartz.........
+        </div>
+    </a>
+    
+        <p class="post-meta">
+            Posted by Stark Yanng on
+            2018-06-21
+        </p>
+    
+
+</div>
+</div>
+<hr>
+
+
+<div class="w3-row-padding">
 	<a href="/2017/07/15/Github-page-Hexo建站/">
         <h2 class="post-title">
             Github page + Hexo建站
@@ -351,6 +578,30 @@ WARN no layout: archives/index.html
             <a href="/tags/#好奇心" title="好奇心" rel="1">好奇心</a>
             
         
+            
+            <a href="/tags/#Java" title="Java" rel="5">Java</a>
+            
+        
+            
+            <a href="/tags/#Java基础" title="Java基础" rel="1">Java基础</a>
+            
+        
+            
+            <a href="/tags/#源码分析" title="源码分析" rel="3">源码分析</a>
+            
+        
+            
+            <a href="/tags/#Quartz" title="Quartz" rel="3">Quartz</a>
+            
+        
+            
+            <a href="/tags/#教程" title="教程" rel="1">教程</a>
+            
+        
+            
+            <a href="/tags/#sleepingtalk" title="sleepingtalk" rel="1">sleepingtalk</a>
+            
+        
     </div>
 </section>
 
@@ -362,7 +613,23 @@ WARN no layout: archives/index.html
     <ul>
       
         <li>
-          <a href="/2017/07/15/Github-page-Hexo%E5%BB%BA%E7%AB%99/">Github page + Hexo建站</a>
+          <a href="/2021/08/15/JAVA%E4%B8%B2%E7%82%B9%E6%88%90%E7%BA%BF%E2%80%94%E2%80%94%E5%AF%B9%E8%B1%A1/">JAVA串点成线——对象</a>
+        </li>
+      
+        <li>
+          <a href="/2019/11/03/Java%E4%B8%AD%E7%9A%84AtomicLong%E5%92%8CLongAdder/">阅读源码——Java中的AtomicLong和LongAdder</a>
+        </li>
+      
+        <li>
+          <a href="/2018/08/26/%E7%9D%A1%E4%BA%86%E4%B8%AA%E5%8D%88%E8%A7%89/">睡了个午觉</a>
+        </li>
+      
+        <li>
+          <a href="/2018/07/20/Quartz%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90%E4%B9%8B%E4%BB%BB%E5%8A%A1%E7%9A%84%E8%B0%83%E5%BA%A6%E5%92%8C%E6%89%A7%E8%A1%8C/">阅读源码——Quartz源码分析之任务的调度和执行</a>
+        </li>
+      
+        <li>
+          <a href="/2018/07/13/Quartz%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90%E4%B9%8B%E4%BB%BB%E5%8A%A1%E5%AD%98%E5%82%A8/">阅读源码——Quartz源码分析之任务存储</a>
         </li>
       
     </ul>
@@ -373,7 +640,7 @@ WARN no layout: archives/index.html
         
     <h5>归档</h5>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">七月 2017</a><span class="archive-list-count">1</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/08/">八月 2021</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/11/">十一月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">八月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">七月 2018</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">六月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">七月 2017</a><span class="archive-list-count">1</span></li></ul>
     </div>
 
         <hr>

@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Stark Yanng">
+    <meta name="keyword"  content="Stark Yanng">
+    <link rel="shortcut icon" href="/img/ironman-draw.png">
+    <!-- Place this tag in your head or just before your close body tag. -->
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
+    <title>
+        
+          阅读源码——Quartz源码分析之任务存储 - Stark Yanng
+        
+    </title>
+
+    <link rel="canonical" href="http://starkyanng.github.io/2018/07/13/Quartz源码分析之任务存储/">
+
+    <!-- Bootstrap Core CSS -->
+
+   
+<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.4.1/css/bootstrap.min.css">
+
+
+    
+
+    <!-- Custom CSS --> 
+    
+<link rel="stylesheet" href="/css/beantech.min.css">
+
+
+    
+<link rel="stylesheet" href="/css/donate.css">
+
+	
+<link rel="stylesheet" href="/css/w3.css">
+
+    <!-- Pygments Highlight CSS -->
+    
+<link rel="stylesheet" href="/css/highlight.css">
+
+
+    
+<link rel="stylesheet" href="/css/widget.css">
+
+
+    
+<link rel="stylesheet" href="/css/rocket.css">
+
+
+    
+<link rel="stylesheet" href="/css/signature.css">
+
+
+    
+<link rel="stylesheet" href="/css/toc.css">
+
+
+    <!-- Custom Fonts -->
+    <!-- <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="https://cdn.staticfile.org/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <!-- Hux Delete, sad but pending in China
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/
+    css'>
+    -->
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+	
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+	<!-- Modified by Yu-Hsuan Yen -->
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+    }
+   .post-heading{
+    padding:20px;
+    }
+  .person {
+    border: 10px solid transparent;
+    margin-bottom: 25px;
+    width: 80%;
+    height: 80%;
+    opacity: 0.7;
+  }
+  .person:hover {
+    border-color: #f1f1f1;
+  }
+
+</style>
+
+<header id="headerid" class="w3-indigo intro-header" style="position:relative;">
+    <!-- Signature -->
+	
+        <div class="container">
+            <div class=" row" >
+			
+			<canvas id="particles-js-canvas" style="position:absolute;z-index:1;top:0px;left:0px;" width="100%" height="50%"></canvas>
+			
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1" style="z-index:2;">
+                
+                    <div class="post-heading" style="padding:40px">
+                        <div class="tags">
+                            
+                              <a class="tag" href="/tags/#Java" title="Java">Java</a>
+                            
+                              <a class="tag" href="/tags/#源码分析" title="源码分析">源码分析</a>
+                            
+                              <a class="tag" href="/tags/#Quartz" title="Quartz">Quartz</a>
+                            
+                        </div>
+                        <h1>阅读源码——Quartz源码分析之任务存储</h1>
+                        <h2 class="subheading"></h2>
+                        <span class="meta">
+                            Posted by Stark Yanng on
+                            2018-07-13
+                        </span>
+                    </div>
+                
+                </div>
+            </div>
+        </div>
+  
+</header>
+
+	
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Stark Yanng</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a  href="/">主页</a>
+                    </li>
+		    
+                    
+
+                        
+                        <li>
+           
+                            <a  href="/技术人生">技术人生</a>
+                           
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+           
+                            <a  href="/我的梦呓">我的梦呓</a>
+                           
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+           
+                            <a  href="/好奇心">好奇心</a>
+                           
+                        </li>
+                        
+                    
+                    
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+
+    <!-- Main Content -->
+    <!-- Modify by Yu-Hsuan Yen -->
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+            <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <p>这一篇主要分析了Quartz中存储Job和Trigger部分的源码。</p>
+<span id="more"></span>
+
+<p>Quartz的基本使用如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">// 实例化一个调度器工厂，每个应用只有唯一一个工厂实例</span><br><span class="line">SchedulerFactory schedFact = new org.quartz.impl.StdSchedulerFactory();</span><br><span class="line">// 实例化一个调度器</span><br><span class="line">Scheduler sched = schedFact.getScheduler();</span><br><span class="line">// 启动，只有启动了调度器Quartz才会去执行任务</span><br><span class="line">sched.start();</span><br><span class="line"></span><br><span class="line">// 实例化一个任务</span><br><span class="line">JobDetail job = newJob(HelloJob.class)</span><br><span class="line">    .withIdentity(&quot;myJob&quot;, &quot;group1&quot;)</span><br><span class="line">    .build();</span><br><span class="line"></span><br><span class="line">// 实例化一个任务触发器,立刻触发，每40s执行一次</span><br><span class="line">Trigger trigger = newTrigger()</span><br><span class="line">    .withIdentity(&quot;myTrigger&quot;, &quot;group1&quot;)</span><br><span class="line">    .startNow()</span><br><span class="line">    .withSchedule(simpleSchedule()</span><br><span class="line">        .withIntervalInSeconds(40)</span><br><span class="line">        .repeatForever())</span><br><span class="line">    .build();</span><br><span class="line"></span><br><span class="line">// 调度任务</span><br><span class="line">sched.scheduleJob(job, trigger);</span><br></pre></td></tr></table></figure>
+
+<p>那我们就从Scheduler的scheduleJob方法开始源码之旅吧。</p>
+<p>进入该方法源码，进入的是Scheduler接口的scheduleJob方法签名：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Date scheduleJob(JobDetail jobDetail, Trigger trigger)</span><br><span class="line">        throws SchedulerException;</span><br></pre></td></tr></table></figure>
+<p>查看该方法的实现，有多个类实现了该接口：</p>
+<ol>
+<li>StdScheduler，这是Quartz对Scheduler的标准实现，也就是我们所要关注的实现</li>
+<li>RemoteScheduler，这是Quartz对远程调用Scheduler的实现，暂且不讨论</li>
+</ol>
+<p>进入StdScheduler的scheduleJob方法实现：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">public Date scheduleJob(JobDetail jobDetail, Trigger trigger)</span><br><span class="line">        throws SchedulerException &#123;</span><br><span class="line">        return sched.scheduleJob(jobDetail, trigger);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>我们发现它直接调用了一个名叫sche的对象的同名方法，这个sche对象是QuartzScheduler类的一个对象，所以StdScheduler是QuartzScheduler的一个代理，每个方法的实现都通过调用QuartzScheduler对应的方法来代理实现。至于为什么要这样做？我觉得是为了解耦。</p>
+<p>那我们再继续进入QuartzScheduler的方法：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">public Date scheduleJob(JobDetail jobDetail,</span><br><span class="line">            Trigger trigger) throws SchedulerException &#123;</span><br><span class="line">        validateState();</span><br><span class="line"></span><br><span class="line">        OperableTrigger trig = (OperableTrigger)trigger;</span><br><span class="line"></span><br><span class="line">        if (trigger.getJobKey() == null) &#123;</span><br><span class="line">            trig.setJobKey(jobDetail.getKey());</span><br><span class="line">        &#125; else if (!trigger.getJobKey().equals(jobDetail.getKey())) &#123;</span><br><span class="line">            throw new SchedulerException(</span><br><span class="line">                &quot;Trigger does not reference given job!&quot;);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        trig.validate();</span><br><span class="line"></span><br><span class="line">        Calendar cal = null;</span><br><span class="line">        if (trigger.getCalendarName() != null) &#123;</span><br><span class="line">            cal = resources.getJobStore().retrieveCalendar(trigger.getCalendarName());</span><br><span class="line">        &#125;</span><br><span class="line">        Date ft = trig.computeFirstFireTime(cal);</span><br><span class="line"></span><br><span class="line">        if (ft == null) &#123;</span><br><span class="line">            throw new SchedulerException(</span><br><span class="line">                    &quot;Based on configured schedule, the given trigger &#x27;&quot; + trigger.getKey() + &quot;&#x27; will never fire.&quot;);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        resources.getJobStore().storeJobAndTrigger(jobDetail, trig);</span><br><span class="line">        notifySchedulerListenersJobAdded(jobDetail);</span><br><span class="line">        notifySchedulerThread(trigger.getNextFireTime().getTime());</span><br><span class="line">        notifySchedulerListenersSchduled(trigger);</span><br><span class="line"></span><br><span class="line">        return ft;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p>总算是找到该方法的真正实现了，其中的一行代码：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">resources.getJobStore().storeJobAndTrigger(jobDetail, trig);</span><br></pre></td></tr></table></figure>
+<p>就是我们此行的真正入口了——Job的存储。</p>
+<p>其中<code>getJobStore</code>方法是QuartzSchedulerResources类的方法，该类存储Scheduler的相关资源，比如JobStore对象。现在我们可以看一下JobStore这个接口了，该接口表示为Job和Trigger提供的存储服务，它主要有如下几个方法：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">// 存储Job</span><br><span class="line">void storeJob(JobDetail newJob, boolean replaceExisting)</span><br><span class="line">        throws ObjectAlreadyExistsException, JobPersistenceException;</span><br><span class="line"></span><br><span class="line">// 存储Job和Triiger</span><br><span class="line">void storeJobAndTrigger(JobDetail newJob, OperableTrigger newTrigger)</span><br><span class="line">        throws ObjectAlreadyExistsException, JobPersistenceException;</span><br><span class="line"></span><br><span class="line">// 存储Trigger</span><br><span class="line">void storeTrigger(OperableTrigger newTrigger, boolean replaceExisting)</span><br><span class="line">        throws ObjectAlreadyExistsException, JobPersistenceException;</span><br><span class="line"></span><br><span class="line">// 删除Job</span><br><span class="line">public boolean removeJobs(List&lt;JobKey&gt; jobKeys)</span><br><span class="line">        throws JobPersistenceException;</span><br><span class="line"></span><br><span class="line">// 删除Triggerpublic boolean removeTriggers(List&lt;TriggerKey&gt; triggerKeys)</span><br><span class="line">        throws JobPersistenceException;</span><br></pre></td></tr></table></figure>
+<p>相当于Job和Trigger的增删改查操作。然后我们看一下有哪些类实现了该接口：</p>
+<ol>
+<li>RAMJobStore，将Job和Trigger存储在内存中</li>
+<li>JobStoreSupport,基于JDBC的Job存储服务，表示将Job和Trigger存储在关系数据库中</li>
+</ol>
+<p>我们先主要关注RAMJobStore，来看一下我们上面看到的<code>storeJobAndTrigger(jobDetail, trig)</code>方法：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">public void storeJobAndTrigger(JobDetail newJob,</span><br><span class="line">            OperableTrigger newTrigger) throws JobPersistenceException &#123;</span><br><span class="line">        // 存储Job</span><br><span class="line">        storeJob(newJob, false);</span><br><span class="line">        // 存储Trigger</span><br><span class="line">        storeTrigger(newTrigger, false);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p> 先看存储Job信息:<br> <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"> public void storeJob(JobDetail newJob,</span><br><span class="line">            boolean replaceExisting) throws ObjectAlreadyExistsException &#123;</span><br><span class="line">        // 克隆原来的Job对象，然后封装为一个JobWrapper</span><br><span class="line">        JobWrapper jw = new JobWrapper((JobDetail)newJob.clone());</span><br><span class="line">        // 表示是否要替换已经存在的Job对象</span><br><span class="line">        boolean repl = false;</span><br><span class="line"></span><br><span class="line">        // 加锁，支持多线程环境</span><br><span class="line">        synchronized (lock) &#123;</span><br><span class="line">            if (!repl) &#123;</span><br><span class="line">                // 获取Job所在的组</span><br><span class="line">                HashMap&lt;JobKey, JobWrapper&gt; grpMap = jobsByGroup.get(newJob.getKey().getGroup());</span><br><span class="line">                if (grpMap == null) &#123;</span><br><span class="line">                    grpMap = new HashMap&lt;JobKey, JobWrapper&gt;(100);</span><br><span class="line">                    jobsByGroup.put(newJob.getKey().getGroup(), grpMap);</span><br><span class="line">                &#125;</span><br><span class="line">                // 将Job加到它所在的组</span><br><span class="line">                grpMap.put(newJob.getKey(), jw);</span><br><span class="line">                // Job加到全局的集合</span><br><span class="line">                jobsByKey.put(jw.key, jw);</span><br><span class="line">            &#125; else &#123;</span><br><span class="line">                // 直接替换原来的Job</span><br><span class="line">                JobWrapper orig = jobsByKey.get(jw.key);</span><br><span class="line">                orig.jobDetail = jw.jobDetail; // already cloned</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>注意：<code>JobWrapper jw = new JobWrapper((JobDetail)newJob.clone());</code>中是实现了对原Job的克隆的，我觉得这样做的原因是，防止其它地方对Job作修改从而影响到Job的行为。</p>
+<p>其中主要涉及到两个用于保存Job的数据结构：</p>
+<ol>
+<li><code>HashMap&lt;String, HashMap&lt;JobKey, JobWrapper&gt;&gt; jobsByGroup</code>:按Job所在的组进行划分的Job集合，以groupKey为键</li>
+<li><code>HashMap&lt;JobKey, JobWrapper&gt; jobsByKey</code>：保存所有Job的集合，同样以JobKey为键</li>
+</ol>
+<p>之所以用两个数据结构，是为了支持对Job的不同的检索方式，前者以Job所在的组进行查询，后者直接以JobKey进行查询。</p>
+<p>看完了Job的存储，再来看Trigger的存储：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line">public void storeTrigger(OperableTrigger newTrigger,</span><br><span class="line">            boolean replaceExisting) throws JobPersistenceException &#123;</span><br><span class="line">        // 同样对Trigger对象进行了克隆</span><br><span class="line">        TriggerWrapper tw = new TriggerWrapper((OperableTrigger)newTrigger.clone());</span><br><span class="line"></span><br><span class="line">        synchronized (lock) &#123;</span><br><span class="line">            if (triggersByKey.get(tw.key) != null) &#123;</span><br><span class="line">                if (!replaceExisting) &#123;</span><br><span class="line">                    throw new ObjectAlreadyExistsException(newTrigger);</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">                removeTrigger(newTrigger.getKey(), false);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            // 要判断该Trigger是否已经和现存的Job相关联</span><br><span class="line">            if (retrieveJob(newTrigger.getJobKey()) == null) &#123;</span><br><span class="line">                throw new JobPersistenceException(&quot;The job (&quot;</span><br><span class="line">                        + newTrigger.getJobKey()</span><br><span class="line">                        + &quot;) referenced by the trigger does not exist.&quot;);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            // add to triggers array</span><br><span class="line">            triggers.add(tw);</span><br><span class="line">            // add to triggers by group</span><br><span class="line">            HashMap&lt;TriggerKey, TriggerWrapper&gt; grpMap = triggersByGroup.get(newTrigger.getKey().getGroup());</span><br><span class="line">            if (grpMap == null) &#123;</span><br><span class="line">                grpMap = new HashMap&lt;TriggerKey, TriggerWrapper&gt;(100);</span><br><span class="line">                triggersByGroup.put(newTrigger.getKey().getGroup(), grpMap);</span><br><span class="line">            &#125;</span><br><span class="line">            grpMap.put(newTrigger.getKey(), tw);</span><br><span class="line">            // add to triggers by FQN map</span><br><span class="line">            triggersByKey.put(tw.key, tw);</span><br><span class="line"></span><br><span class="line">            // 更新Trigger的状态</span><br><span class="line">            if(pausedTriggerGroups.contains(newTrigger.getKey().getGroup())</span><br><span class="line">                    || pausedJobGroups.contains(newTrigger.getJobKey().getGroup())) &#123;</span><br><span class="line">                tw.state = TriggerWrapper.STATE_PAUSED;</span><br><span class="line">                if (blockedJobs.contains(tw.jobKey)) &#123;</span><br><span class="line">                    tw.state = TriggerWrapper.STATE_PAUSED_BLOCKED;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125; else if (blockedJobs.contains(tw.jobKey)) &#123;</span><br><span class="line">                tw.state = TriggerWrapper.STATE_BLOCKED;</span><br><span class="line">            &#125; else &#123;</span><br><span class="line">                timeTriggers.add(tw);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>基本和Job的存储如出一辙，不同的地方有两处：</p>
+<ol>
+<li>要判断该Trigger是否已经和现存的Job相关联，如果没有则抛出<code>JobPersistenceException</code>异常。</li>
+<li>要更新Trigger的状态。</li>
+</ol>
+<p>Trigger的状态有以下几种：</p>
+<ol>
+<li>STATE_WAITING ：等待状态</li>
+<li>STATE_ACQUIRED ： 已触发状态</li>
+<li>STATE_EXECUTING : 正在执行状态</li>
+<li>STATE_COMPLETE : 已完成状态</li>
+<li>STATE_PAUSED : 暂停状态</li>
+<li>STATE_BLOCKED : 阻塞状态</li>
+<li>STATE_PAUSED_BLOCKED ： 暂停且阻塞状态</li>
+<li>STATE_ERROR ： 错误状态</li>
+</ol>
+<p>完。</p>
+
+                
+
+                <hr>
+                <!-- Pager -->
+                <ul class="pager">
+                    
+                        <li class="previous">
+                            <a href="/2018/07/20/Quartz源码分析之任务的调度和执行/" data-toggle="tooltip" data-placement="top" title="阅读源码——Quartz源码分析之任务的调度和执行">&larr; 上一篇</a>
+                        </li>
+                    
+                    
+                        <li class="next">
+                            <a href="/2018/06/21/Quartz入门/" data-toggle="tooltip" data-placement="top" title="教程——Quartz入门">下一篇 &rarr;</a>
+                        </li>
+                    
+                </ul>
+
+                <br>
+
+                <!--打赏-->
+                
+                <!--打赏-->
+
+                <br>
+                <!--分享-->
+                
+                <!--分享-->
+                <br>                       
+                
+                <!-- require APlayer -->
+                
+
+                <!-- disqus comment start -->
+                
+                <!-- disqus comment end -->
+
+                
+				
+            </div>
+
+            <!-- Tabe of Content -->
+            <!-- Table of Contents -->
+
+                
+            <!-- Sidebar Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5><a href="/tags/">标签云</a></h5>
+                    <div class="tags">
+                       
+                          <a class="tag" href="/tags/#Java" title="Java">Java</a>
+                        
+                          <a class="tag" href="/tags/#源码分析" title="源码分析">源码分析</a>
+                        
+                          <a class="tag" href="/tags/#Quartz" title="Quartz">Quartz</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+                <hr>
+                <h5>FRIENDS</h5>
+                <ul class="list-inline">
+
+                    
+                        <li><a href="https://coolshell.cn" target="_blank">coolshell</a></li>
+                    
+                </ul>
+                
+            </div>
+        </div>
+    </div>
+</article>
+
+
+
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("https://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'hover',
+          placement: 'left',
+          icon: 'ℬ'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+
+
+    <!-- Footer -->
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                
+                
+                
+
+                
+
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://github.com/starkyanng">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; Stark Yanng 2021 
+                    <br>
+                    Powered by <a target="_blank" rel="noopener" href="http://www.hexo.io">Hexo</a> 
+                    <span style="display: inline-block; margin: 0 5px;">
+                        <i class="fa fa-heart"></i>
+                    </span> 
+                    Theme by <a target="_blank" rel="noopener" href="https://github.com/kinggozhang/hexo-theme-ace">ACE</a> 
+					
+					
+					<i class="fa fa-eye" id="leancounter"></i>
+					
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+
+   
+<script src="https://cdn.staticfile.org/jquery/2.2.4/jquery.min.js"></script>
+
+
+
+
+<!-- Bootstrap Core JavaScript -->
+
+   
+<script src="https://cdn.staticfile.org/twitter-bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+
+
+<!-- Custom Theme JavaScript -->
+
+<script src="/js/hux-blog.min.js"></script>
+
+
+
+	
+<script src="/js/particles.js"></script>
+
+	
+<script src="/js/particles_config.js"></script>
+
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- 
+     Because of the native support for backtick-style fenced code blocks 
+     right within the Markdown is landed in Github Pages, 
+     From V1.6, There is no need for Highlight.js, 
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0  
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/    
+-->
+<!--
+    <script>
+        async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("http://starkyanng.github.io/2018/07/13/Quartz%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90%E4%B9%8B%E4%BB%BB%E5%8A%A1%E5%AD%98%E5%82%A8/index.html/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("https://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+
+
+
+<!-- Baidu Tongji -->
+
+
+
+
+
+
+	<a id="rocket" href="#top" class=""></a>
+	<script type="text/javascript" src="/js/totop.js?v=1.0.0" async=""></script>
+    <script type="text/javascript" src="/js/toc.js?v=1.0.0" async=""></script>
+<!-- Image to hack wechat -->
+<img src="http://starkyanng.github.io/img/icon_wechat.png" width="0" height="0" />
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>

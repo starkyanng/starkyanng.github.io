@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Stark Yanng">
+    <meta name="keyword"  content="Stark Yanng">
+    <link rel="shortcut icon" href="/img/ironman-draw.png">
+    <!-- Place this tag in your head or just before your close body tag. -->
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
+    <title>
+        
+          阅读源码——Quartz源码分析之任务的调度和执行 - Stark Yanng
+        
+    </title>
+
+    <link rel="canonical" href="http://starkyanng.github.io/2018/07/20/Quartz源码分析之任务的调度和执行/">
+
+    <!-- Bootstrap Core CSS -->
+
+   
+<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.4.1/css/bootstrap.min.css">
+
+
+    
+
+    <!-- Custom CSS --> 
+    
+<link rel="stylesheet" href="/css/beantech.min.css">
+
+
+    
+<link rel="stylesheet" href="/css/donate.css">
+
+	
+<link rel="stylesheet" href="/css/w3.css">
+
+    <!-- Pygments Highlight CSS -->
+    
+<link rel="stylesheet" href="/css/highlight.css">
+
+
+    
+<link rel="stylesheet" href="/css/widget.css">
+
+
+    
+<link rel="stylesheet" href="/css/rocket.css">
+
+
+    
+<link rel="stylesheet" href="/css/signature.css">
+
+
+    
+<link rel="stylesheet" href="/css/toc.css">
+
+
+    <!-- Custom Fonts -->
+    <!-- <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="https://cdn.staticfile.org/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <!-- Hux Delete, sad but pending in China
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/
+    css'>
+    -->
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+	
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+	<!-- Modified by Yu-Hsuan Yen -->
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+    }
+   .post-heading{
+    padding:20px;
+    }
+  .person {
+    border: 10px solid transparent;
+    margin-bottom: 25px;
+    width: 80%;
+    height: 80%;
+    opacity: 0.7;
+  }
+  .person:hover {
+    border-color: #f1f1f1;
+  }
+
+</style>
+
+<header id="headerid" class="w3-indigo intro-header" style="position:relative;">
+    <!-- Signature -->
+	
+        <div class="container">
+            <div class=" row" >
+			
+			<canvas id="particles-js-canvas" style="position:absolute;z-index:1;top:0px;left:0px;" width="100%" height="50%"></canvas>
+			
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1" style="z-index:2;">
+                
+                    <div class="post-heading" style="padding:40px">
+                        <div class="tags">
+                            
+                              <a class="tag" href="/tags/#Java" title="Java">Java</a>
+                            
+                              <a class="tag" href="/tags/#源码分析" title="源码分析">源码分析</a>
+                            
+                              <a class="tag" href="/tags/#Quartz" title="Quartz">Quartz</a>
+                            
+                        </div>
+                        <h1>阅读源码——Quartz源码分析之任务的调度和执行</h1>
+                        <h2 class="subheading"></h2>
+                        <span class="meta">
+                            Posted by Stark Yanng on
+                            2018-07-20
+                        </span>
+                    </div>
+                
+                </div>
+            </div>
+        </div>
+  
+</header>
+
+	
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Stark Yanng</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a  href="/">主页</a>
+                    </li>
+		    
+                    
+
+                        
+                        <li>
+           
+                            <a  href="/技术人生">技术人生</a>
+                           
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+           
+                            <a  href="/我的梦呓">我的梦呓</a>
+                           
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+           
+                            <a  href="/好奇心">好奇心</a>
+                           
+                        </li>
+                        
+                    
+                    
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+
+    <!-- Main Content -->
+    <!-- Modify by Yu-Hsuan Yen -->
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+            <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <p>上篇分析完了Quartz中任务的存储，这一篇分析一下Quartz中的任务是如何调度和执行的。</p>
+<span id="more"></span>
+
+<!-- TOC depthFrom:1 depthTo:6 withLinks:1 updateOnSave:1 orderedList:0 -->
+
+<ul>
+<li><a href="#%E8%B0%83%E5%BA%A6%E7%BA%BF%E7%A8%8Bquartzschedulerthread">调度线程quartzschedulerthread</a><ul>
+<li><a href="#%E8%8E%B7%E5%8F%96%E5%88%B0%E8%BE%BE%E8%A7%A6%E5%8F%91%E6%97%B6%E9%97%B4%E7%9A%84triggers">获取到达触发时间的triggers</a></li>
+<li><a href="#%E8%A7%A6%E5%8F%91triggers">触发triggers</a></li>
+<li><a href="#%E6%89%A7%E8%A1%8C%E6%89%80%E6%9C%89triggers%E5%AF%B9%E5%BA%94%E7%9A%84jobs">执行所有triggers对应的jobs</a><ul>
+<li><a href="#%E6%9E%84%E9%80%A0job%E7%9A%84%E6%89%A7%E8%A1%8C%E7%8E%AF%E5%A2%83">构造job的执行环境</a></li>
+<li><a href="#%E5%9C%A8%E5%AD%90%E7%BA%BF%E7%A8%8B%E4%B8%AD%E6%89%A7%E8%A1%8Cjob%E4%BB%BB%E5%8A%A1">在子线程中执行job任务</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<!-- /TOC -->
+
+<p>上一篇提到<code>QuartzScheduler</code>类，这是Quartz实际意义上的调度器，先来看一下它的构造方法，可以看到其中这么一段：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">public QuartzScheduler(QuartzSchedulerResources resources, long idleWaitTime, @Deprecated long dbRetryInterval)</span><br><span class="line">    throws SchedulerException &#123;</span><br><span class="line">    //...</span><br><span class="line"></span><br><span class="line">    this.schedThread = new QuartzSchedulerThread(this, resources);</span><br><span class="line">    ThreadExecutor schedThreadExecutor = resources.getThreadExecutor();</span><br><span class="line">    schedThreadExecutor.execute(this.schedThread);</span><br><span class="line">    if (idleWaitTime &gt; 0) &#123;</span><br><span class="line">        this.schedThread.setIdleWaitTime(idleWaitTime);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    //...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>可以看出，在实例化<code>QuartzScheduler</code>调度器时，就早早地启动了一个叫<code>QuartzSchedulerThread</code>的线程，这个线程就是今天的开场嘉宾了。那么这个线程是干什么的呢？</p>
+<h1 id="调度线程quartzschedulerthread"><a href="#调度线程quartzschedulerthread" class="headerlink" title="调度线程quartzschedulerthread"></a>调度线程quartzschedulerthread</h1><p>其实这个<code>QuartzSchedulerThread</code>类就是负责触发调度器中那些到达它们触发时间的<code>trrigers</code>的，该类继承了<code>Thread</code>类，我们看一下它的<code>run</code>方法做了哪些工作：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br></pre></td><td class="code"><pre><span class="line">while (!halted.get()) &#123;</span><br><span class="line">    try &#123;</span><br><span class="line">        int availThreadCount = qsRsrcs.getThreadPool().blockForAvailableThreads();</span><br><span class="line">        if(availThreadCount &gt; 0) &#123; // will always be true, due to semantics of blockForAvailableThreads...</span><br><span class="line">            List&lt;OperableTrigger&gt; triggers = null;</span><br><span class="line"></span><br><span class="line">            long now = System.currentTimeMillis();</span><br><span class="line"></span><br><span class="line">            clearSignaledSchedulingChange();</span><br><span class="line">            // 1.获取到达它们触发时间的triggers</span><br><span class="line">            try &#123;</span><br><span class="line">                triggers = qsRsrcs.getJobStore().acquireNextTriggers(</span><br><span class="line">                        now + idleWaitTime, Math.min(availThreadCount, qsRsrcs.getMaxBatchSize()), qsRsrcs.getBatchTimeWindow());</span><br><span class="line">                lastAcquireFailed = false;</span><br><span class="line">                if (log.isDebugEnabled())</span><br><span class="line">                    log.debug(&quot;batch acquisition of &quot; + (triggers == null ? 0 : triggers.size()) + &quot; triggers&quot;);</span><br><span class="line">            &#125; catch (JobPersistenceException jpe) &#123;</span><br><span class="line">                // 错误处理...</span><br><span class="line">            &#125; catch (RuntimeException e) &#123;</span><br><span class="line">                // 错误处理...</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            if (triggers != null &amp;&amp; !triggers.isEmpty()) &#123;</span><br><span class="line">                // 略</span><br><span class="line"></span><br><span class="line">                boolean goAhead = true;</span><br><span class="line">                synchronized(sigLock) &#123;</span><br><span class="line">                    goAhead = !halted.get();</span><br><span class="line">                &#125;</span><br><span class="line">                if(goAhead) &#123;</span><br><span class="line">                    try &#123;</span><br><span class="line">                      // 2.触发triggers</span><br><span class="line">                        List&lt;TriggerFiredResult&gt; res = qsRsrcs.getJobStore().triggersFired(triggers);</span><br><span class="line">                        if(res != null)</span><br><span class="line">                            bndles = res;</span><br><span class="line">                    &#125; catch (SchedulerException se) &#123;</span><br><span class="line">                        // 错误处理...</span><br><span class="line">                    &#125;</span><br><span class="line"></span><br><span class="line">                &#125;</span><br><span class="line">                // 3.执行所有triggers对应的jobs</span><br><span class="line">                for (int i = 0; i &lt; bndles.size(); i++) &#123;</span><br><span class="line">                    TriggerFiredResult result =  bndles.get(i);</span><br><span class="line">                    TriggerFiredBundle bndle =  result.getTriggerFiredBundle();</span><br><span class="line"></span><br><span class="line">                    JobRunShell shell = null;</span><br><span class="line">                    try &#123;</span><br><span class="line">                        shell = qsRsrcs.getJobRunShellFactory().createJobRunShell(bndle);</span><br><span class="line">                        shell.initialize(qs);</span><br><span class="line">                    &#125; catch (SchedulerException se) &#123;</span><br><span class="line">                        // 错误处理...</span><br><span class="line">                    &#125;</span><br><span class="line"></span><br><span class="line">                    if (qsRsrcs.getThreadPool().runInThread(shell) == false) &#123;</span><br><span class="line">                        // 错误处理...</span><br><span class="line">                    &#125;</span><br><span class="line"></span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">                continue; // while (!halted)</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; else &#123; // if(availThreadCount &gt; 0)</span><br><span class="line">            // should never happen, if threadPool.blockForAvailableThreads() follows contract</span><br><span class="line">            continue; // while (!halted)</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        // 略</span><br><span class="line"></span><br><span class="line">    &#125; catch(RuntimeException re) &#123;</span><br><span class="line">        getLog().error(&quot;Runtime error occurred in main trigger firing loop.&quot;, re);</span><br><span class="line">    &#125;</span><br><span class="line">&#125; // while (!halted)</span><br></pre></td></tr></table></figure>
+
+<p>可以看到，它的<code>run</code>方法最外层就是一个大的<code>while</code>循环，只要<code>halted</code>变量为<code>false</code>，也就是线程没有停止执行，它就会一直循环下去。除去一些额外的工作，在<code>while</code>循环里一共分3个阶段执行：</p>
+<ol>
+<li>第<code>55</code>行：获取到达它们触发时间的triggers</li>
+<li>第<code>121</code>行：触发triggers</li>
+<li>第<code>138</code>行：执行所有triggers对应的jobs</li>
+</ol>
+<p>下面就分别看每个阶段做的工作。</p>
+<h2 id="获取到达触发时间的triggers"><a href="#获取到达触发时间的triggers" class="headerlink" title="获取到达触发时间的triggers"></a>获取到达触发时间的triggers</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">List&lt;OperableTrigger&gt; triggers = null;</span><br><span class="line">// 获取当前时间</span><br><span class="line">long now = System.currentTimeMillis();</span><br><span class="line">// 从JobStore里获取到达触发时间的triggers</span><br><span class="line">triggers = qsRsrcs.getJobStore().acquireNextTriggers(</span><br><span class="line">            now + idleWaitTime, Math.min(availThreadCount, qsRsrcs.getMaxBatchSize()), qsRsrcs.getBatchTimeWindow());</span><br></pre></td></tr></table></figure>
+<p>其中是通过调用<code>JobStore</code>接口的<code>acquireNextTriggers</code>方法来获取到达触发时间的triggers的，该方法的签名：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">@param noLaterThan : 表示要返回的triggers的触发时间不能晚于该时间</span><br><span class="line">@param maxCount : triggers数量的上限</span><br><span class="line">List&lt;OperableTrigger&gt; acquireNextTriggers(long noLaterThan, int maxCount, long timeWindow)</span><br><span class="line">    throws JobPersistenceException;</span><br></pre></td></tr></table></figure>
+<p>再看看<code>RAMJobStore</code>对该方法的实现：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br></pre></td><td class="code"><pre><span class="line">public List&lt;OperableTrigger&gt; acquireNextTriggers(long noLaterThan, int maxCount, long timeWindow) &#123;</span><br><span class="line">    synchronized (lock) &#123;</span><br><span class="line">        List&lt;OperableTrigger&gt; result = new ArrayList&lt;OperableTrigger&gt;();</span><br><span class="line">        Set&lt;JobKey&gt; acquiredJobKeysForNoConcurrentExec = new HashSet&lt;JobKey&gt;();</span><br><span class="line">        Set&lt;TriggerWrapper&gt; excludedTriggers = new HashSet&lt;TriggerWrapper&gt;();</span><br><span class="line">        // trigger触发时间的截止点</span><br><span class="line">        long batchEnd = noLaterThan;</span><br><span class="line"></span><br><span class="line">        while (true) &#123;</span><br><span class="line">            TriggerWrapper tw;</span><br><span class="line"></span><br><span class="line">            try &#123;</span><br><span class="line">              // timeTriggers是所有的triggers集合，每次获取一个trigger</span><br><span class="line">                tw = timeTriggers.first();</span><br><span class="line">              	// 如果triggers取完了，退出循环</span><br><span class="line">                if (tw == null)</span><br><span class="line">                    break;</span><br><span class="line">                timeTriggers.remove(tw);</span><br><span class="line">            &#125; catch (java.util.NoSuchElementException nsee) &#123;</span><br><span class="line">                break;</span><br><span class="line">            &#125;</span><br><span class="line">            // 如果trigger下一次的触发时间为空，直接跳过进行下一个trigger的判断</span><br><span class="line">            if (tw.trigger.getNextFireTime() == null) &#123;</span><br><span class="line">                continue;</span><br><span class="line">            &#125;</span><br><span class="line">     	     // 如果已经过了当前trigger的触发时间，重新加到timeTriggers集合中，并直接跳过去判断下一个trigger</span><br><span class="line">            if (applyMisfire(tw)) &#123;</span><br><span class="line">                if (tw.trigger.getNextFireTime() != null) &#123;</span><br><span class="line">                    timeTriggers.add(tw);</span><br><span class="line">                &#125;</span><br><span class="line">                continue;</span><br><span class="line">            &#125;</span><br><span class="line">      	    // 如果当前trigger的触发时间已经超过了截止时间点，说明在截止时间点之前的trigger已经处理完了，则将当前trigger重新放入timeTriggers集合，并退出循环</span><br><span class="line">            if (tw.getTrigger().getNextFireTime().getTime() &gt; batchEnd) &#123;</span><br><span class="line">                timeTriggers.add(tw);</span><br><span class="line">                break;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            // If trigger&#x27;s job is set as @DisallowConcurrentExecution, and it has already been added to result, then</span><br><span class="line">            // put it back into the timeTriggers set and continue to search for next trigger.</span><br><span class="line">            JobKey jobKey = tw.trigger.getJobKey();</span><br><span class="line">            JobDetail job = jobsByKey.get(tw.trigger.getJobKey()).jobDetail;</span><br><span class="line">            if (job.isConcurrentExectionDisallowed()) &#123;</span><br><span class="line">                if (acquiredJobKeysForNoConcurrentExec.contains(jobKey)) &#123;</span><br><span class="line">                    excludedTriggers.add(tw);</span><br><span class="line">                    continue; // go to next trigger in store.</span><br><span class="line">                &#125; else &#123;</span><br><span class="line">                    acquiredJobKeysForNoConcurrentExec.add(jobKey);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            // 更新trigger的状态</span><br><span class="line">            tw.state = TriggerWrapper.STATE_ACQUIRED;</span><br><span class="line">            tw.trigger.setFireInstanceId(getFiredTriggerRecordId());</span><br><span class="line">            // 克隆trigger为一个新的trigger对象</span><br><span class="line">            OperableTrigger trig = (OperableTrigger) tw.trigger.clone();</span><br><span class="line">            if (result.isEmpty()) &#123;</span><br><span class="line">                batchEnd = Math.max(tw.trigger.getNextFireTime().getTime(), System.currentTimeMillis()) + timeWindow;</span><br><span class="line">            &#125;</span><br><span class="line">            // 加入结果的triggers集合</span><br><span class="line">            result.add(trig);</span><br><span class="line">            if (result.size() == maxCount)</span><br><span class="line">                break;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        // If we did excluded triggers to prevent ACQUIRE state due to DisallowConcurrentExecution, we need to add them back to store.</span><br><span class="line">        if (excludedTriggers.size() &gt; 0)</span><br><span class="line">            timeTriggers.addAll(excludedTriggers);</span><br><span class="line">        return result;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>详细的分析见代码中的注释。</p>
+<h2 id="触发triggers"><a href="#触发triggers" class="headerlink" title="触发triggers"></a>触发triggers</h2><p>获取到所有到达触发时间的triggers后，就可以触发这些triggers了，调用的是<code>JobStore</code>接口中的<code>triggersFired</code>方法，来通知<code>JobStore</code>调度器正在触发这些triggers。看一下<code>RAMJobStore</code>对该方法的实现：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">public List&lt;TriggerFiredResult&gt; triggersFired(List&lt;OperableTrigger&gt; firedTriggers) &#123;</span><br><span class="line">    synchronized (lock) &#123;</span><br><span class="line">        List&lt;TriggerFiredResult&gt; results = new ArrayList&lt;TriggerFiredResult&gt;();</span><br><span class="line"></span><br><span class="line">        for (OperableTrigger trigger : firedTriggers) &#123;</span><br><span class="line">        	TriggerWrapper tw = triggersByKey.get(trigger.getKey());</span><br><span class="line">        	// 略</span><br><span class="line"></span><br><span class="line">        	// 触发trigger</span><br><span class="line">        	tw.trigger.triggered(cal);</span><br><span class="line">        	trigger.triggered(cal);</span><br><span class="line">        	// 保存trigger触发过程中相关的数据</span><br><span class="line">        	TriggerFiredBundle bndle = new TriggerFiredBundle(retrieveJob(</span><br><span class="line">        		tw.jobKey), trigger, cal,</span><br><span class="line">        		false, new Date(), trigger.getPreviousFireTime(), prevFireTime,</span><br><span class="line">        		trigger.getNextFireTime());</span><br><span class="line"></span><br><span class="line">        	// 略</span><br><span class="line"></span><br><span class="line">        	results.add(new TriggerFiredResult(bndle));</span><br><span class="line">        	&#125;</span><br><span class="line">    		return results;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>该方法中主要完成的工作就是通过调用Trigger的<code>triggered</code>方法来触发trigger，主要就是更新了trigger的<code>previousFireTime</code>和<code>nextFireTime</code>；然后通过构造<code>TriggerFiredBundle</code>对象来保存trigger触发过程中相关的数据,主要包括下列数据:</p>
+<ul>
+<li>对应的job对象信息</li>
+<li>trigger对象信息</li>
+<li>触发时间<code>fireTime</code></li>
+<li>上一次触发时间<code>prevFireTime</code></li>
+<li>下一次触发时间<code>nextFireTime</code></li>
+</ul>
+<h2 id="执行所有triggers对应的jobs"><a href="#执行所有triggers对应的jobs" class="headerlink" title="执行所有triggers对应的jobs"></a>执行所有triggers对应的jobs</h2><p>上面的触发trigger其实只是更新了相应trigger的触发时间，并没有真正执行对应的job，这一步才是真正执行job任务。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">for (int i = 0; i &lt; bndles.size(); i++) &#123;</span><br><span class="line">		TriggerFiredResult result =  bndles.get(i);</span><br><span class="line">		TriggerFiredBundle bndle =  result.getTriggerFiredBundle();</span><br><span class="line"></span><br><span class="line">		// 略</span><br><span class="line"></span><br><span class="line">		JobRunShell shell = null;</span><br><span class="line">		try &#123;</span><br><span class="line">    			shell = qsRsrcs.getJobRunShellFactory().createJobRunShell(bndle);</span><br><span class="line">    			shell.initialize(qs);</span><br><span class="line">		&#125; catch (SchedulerException se) &#123;</span><br><span class="line">    			// 错误处理</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		if (qsRsrcs.getThreadPool().runInThread(shell) == false) &#123;</span><br><span class="line">    			// 错误处理</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>主要分为两步：</p>
+<h3 id="构造job的执行环境"><a href="#构造job的执行环境" class="headerlink" title="构造job的执行环境"></a>构造job的执行环境</h3><p>job的执行环境<code>JobRunShell</code>是指提供一个安全的环境来执行job任务，捕获任务中抛出的异常，然后在任务完成时根据其<code>completion code</code>来更新trigger。</p>
+<p><code>JobRunShell</code>对象的构造使用了工厂模式，通过<code>JobRunShellFactory</code>工厂接口的<code>createJobRunShell</code>方法来构造。Quartz提供了对<code>JobRunShellFactory</code>接口的标准实现类<code>StdJobRunShellFactory</code>，它采用了最简单的方法来实现：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">public JobRunShell createJobRunShell(TriggerFiredBundle bndle) throws SchedulerException &#123;</span><br><span class="line">    return new JobRunShell(scheduler, bndle);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>接着我们看一下这个job的执行环境里面包含了哪些数据：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">// job的执行上下文</span><br><span class="line">protected JobExecutionContextImpl jec = null;</span><br><span class="line">// 调度器的实现类</span><br><span class="line">protected QuartzScheduler qs = null;</span><br><span class="line">// trigger的相关数据</span><br><span class="line">protected TriggerFiredBundle firedTriggerBundle = null;</span><br><span class="line">// 调度器接口</span><br><span class="line">protected Scheduler scheduler = null;</span><br><span class="line"></span><br><span class="line">protected volatile boolean shutdownRequested = false;</span><br></pre></td></tr></table></figure>
+<p>在下面job任务的执行一节我们再看看是如何用到这些数据的。</p>
+<h3 id="在子线程中执行job任务"><a href="#在子线程中执行job任务" class="headerlink" title="在子线程中执行job任务"></a>在子线程中执行job任务</h3><p>在创建完job任务的执行环境后，就可以真正执行job了。首先，<code>JobRunShell</code>类是实现了<code>Runnable</code>接口的，所以它其实也是一个可执行任务。因此Quartz中把它交给一个子线程去执行。即：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">if (qsRsrcs.getThreadPool().runInThread(shell) == false) &#123;</span><br><span class="line">    // 错误处理</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>可以看出，Quartz是通过线程池来提供多线程服务的。Quartz提供了自己的<code>ThreadPool</code>接口，并提供了标准实现类<code>SimpleThreadPool</code>，然后实现<code>runInThread</code>方法来提供多线程服务，我们看一下这个方法的实现：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">public boolean runInThread(Runnable runnable) &#123;</span><br><span class="line">    synchronized (nextRunnableLock) &#123;</span><br><span class="line">        // 等待空闲线程</span><br><span class="line">        while ((availWorkers.size() &lt; 1) &amp;&amp; !isShutdown) &#123;</span><br><span class="line">            try &#123;</span><br><span class="line">                nextRunnableLock.wait(500);</span><br><span class="line">            &#125; catch (InterruptedException ignore) &#123;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    if (!isShutdown) &#123;</span><br><span class="line">	      // 获取线程池里的一个WorkerThread来执行任务</span><br><span class="line">   			WorkerThread wt = (WorkerThread)availWorkers.removeFirst();</span><br><span class="line">  			busyWorkers.add(wt);</span><br><span class="line">  			wt.run(runnable);</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">         // 如果线程池已经被关闭了，直接重新new一个线程来执行任务</span><br><span class="line">         WorkerThread wt = new WorkerThread(this, threadGroup,</span><br><span class="line">             &quot;WorkerThread-LastJob&quot;, prio, isMakeThreadsDaemons(),runnable);</span><br><span class="line">         busyWorkers.add(wt);</span><br><span class="line">         workers.add(wt);</span><br><span class="line">         wt.start();</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">    return true;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>很简单，Quartz定义了一个<code>WorkerThread</code>来实现多线程去执行job任务。</p>
+<p>上面是Quartz如何提供多线程服务的，最后就具体看一下job任务是怎么执行的，也就是<code>JobRunShell</code>的run方法：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line">public void run() &#123;</span><br><span class="line">    try &#123;</span><br><span class="line">        OperableTrigger trigger = (OperableTrigger) jec.getTrigger();</span><br><span class="line">        JobDetail jobDetail = jec.getJobDetail();</span><br><span class="line"></span><br><span class="line">        do &#123;</span><br><span class="line">        JobExecutionException jobExEx = null;</span><br><span class="line">        Job job = jec.getJobInstance();</span><br><span class="line"></span><br><span class="line">        try &#123;</span><br><span class="line">            // 目前是个空实现，供子类扩展</span><br><span class="line">            begin();</span><br><span class="line">        &#125; catch (SchedulerException se) &#123;</span><br><span class="line">            // 错误处理...</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        // 略</span><br><span class="line"></span><br><span class="line">        long startTime = System.currentTimeMillis();</span><br><span class="line">        long endTime = startTime;</span><br><span class="line"></span><br><span class="line">        // 执行任务</span><br><span class="line">        try &#123;</span><br><span class="line">            job.execute(jec);</span><br><span class="line">            endTime = System.currentTimeMillis();</span><br><span class="line">        &#125; catch (JobExecutionException jee) &#123;</span><br><span class="line">                // 错误处理...</span><br><span class="line">            &#125; catch (Throwable e) &#123;</span><br><span class="line">                // 错误处理...</span><br><span class="line">            &#125;</span><br><span class="line">        // 设置job的执行时间</span><br><span class="line">        jec.setJobRunTime(endTime - startTime);</span><br><span class="line"></span><br><span class="line">        // 更新trigger</span><br><span class="line">        try &#123;</span><br><span class="line">             instCode = trigger.executionComplete(jec, jobExEx);</span><br><span class="line">        &#125; catch (Exception e) &#123;</span><br><span class="line">            // 错误处理...</span><br><span class="line">        &#125;</span><br><span class="line">        &#125; while (true);</span><br><span class="line"></span><br><span class="line">    &#125; finally &#123;</span><br><span class="line">        qs.removeInternalSchedulerListener(this);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>其实最后转了一圈，也就是调用<code>Job</code>的<code>execute</code>方法了，而我们就是在这个方法里面实现我们的业务逻辑的。</p>
+<p>完。</p>
+
+                
+
+                <hr>
+                <!-- Pager -->
+                <ul class="pager">
+                    
+                        <li class="previous">
+                            <a href="/2018/08/26/睡了个午觉/" data-toggle="tooltip" data-placement="top" title="睡了个午觉">&larr; 上一篇</a>
+                        </li>
+                    
+                    
+                        <li class="next">
+                            <a href="/2018/07/13/Quartz源码分析之任务存储/" data-toggle="tooltip" data-placement="top" title="阅读源码——Quartz源码分析之任务存储">下一篇 &rarr;</a>
+                        </li>
+                    
+                </ul>
+
+                <br>
+
+                <!--打赏-->
+                
+                <!--打赏-->
+
+                <br>
+                <!--分享-->
+                
+                <!--分享-->
+                <br>                       
+                
+                <!-- require APlayer -->
+                
+
+                <!-- disqus comment start -->
+                
+                <!-- disqus comment end -->
+
+                
+				
+            </div>
+
+            <!-- Tabe of Content -->
+            <!-- Table of Contents -->
+
+                
+            <!-- Sidebar Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5><a href="/tags/">标签云</a></h5>
+                    <div class="tags">
+                       
+                          <a class="tag" href="/tags/#Java" title="Java">Java</a>
+                        
+                          <a class="tag" href="/tags/#源码分析" title="源码分析">源码分析</a>
+                        
+                          <a class="tag" href="/tags/#Quartz" title="Quartz">Quartz</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+                <hr>
+                <h5>FRIENDS</h5>
+                <ul class="list-inline">
+
+                    
+                        <li><a href="https://coolshell.cn" target="_blank">coolshell</a></li>
+                    
+                </ul>
+                
+            </div>
+        </div>
+    </div>
+</article>
+
+
+
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("https://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'hover',
+          placement: 'left',
+          icon: 'ℬ'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+
+
+    <!-- Footer -->
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                
+                
+                
+
+                
+
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://github.com/starkyanng">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; Stark Yanng 2021 
+                    <br>
+                    Powered by <a target="_blank" rel="noopener" href="http://www.hexo.io">Hexo</a> 
+                    <span style="display: inline-block; margin: 0 5px;">
+                        <i class="fa fa-heart"></i>
+                    </span> 
+                    Theme by <a target="_blank" rel="noopener" href="https://github.com/kinggozhang/hexo-theme-ace">ACE</a> 
+					
+					
+					<i class="fa fa-eye" id="leancounter"></i>
+					
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+
+   
+<script src="https://cdn.staticfile.org/jquery/2.2.4/jquery.min.js"></script>
+
+
+
+
+<!-- Bootstrap Core JavaScript -->
+
+   
+<script src="https://cdn.staticfile.org/twitter-bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+
+
+<!-- Custom Theme JavaScript -->
+
+<script src="/js/hux-blog.min.js"></script>
+
+
+
+	
+<script src="/js/particles.js"></script>
+
+	
+<script src="/js/particles_config.js"></script>
+
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- 
+     Because of the native support for backtick-style fenced code blocks 
+     right within the Markdown is landed in Github Pages, 
+     From V1.6, There is no need for Highlight.js, 
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0  
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/    
+-->
+<!--
+    <script>
+        async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("http://starkyanng.github.io/2018/07/20/Quartz%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90%E4%B9%8B%E4%BB%BB%E5%8A%A1%E7%9A%84%E8%B0%83%E5%BA%A6%E5%92%8C%E6%89%A7%E8%A1%8C/index.html/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("https://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+
+
+
+<!-- Baidu Tongji -->
+
+
+
+
+
+
+	<a id="rocket" href="#top" class=""></a>
+	<script type="text/javascript" src="/js/totop.js?v=1.0.0" async=""></script>
+    <script type="text/javascript" src="/js/toc.js?v=1.0.0" async=""></script>
+<!-- Image to hack wechat -->
+<img src="http://starkyanng.github.io/img/icon_wechat.png" width="0" height="0" />
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>
